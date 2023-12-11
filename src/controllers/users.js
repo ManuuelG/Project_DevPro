@@ -9,8 +9,7 @@ const register = async (req, res) => {
 
   if (user) {
     return res.status(400).json({
-      message:
-        'Hemos encontrado un problema con el registro, intente nuevamente',
+      message: 'Hemos encontrado un problema con el registro',
     })
   }
 
