@@ -6,10 +6,40 @@ const mongoose = require('mongoose')
 
 const getAll = async (req, res) => {
   try {
-    const projects = await Project.find()
+    const { skills, author } = req.query
+    let query = {}
+
+    if (skills) {
+      const skillNames = await Skill.find({ name: { $in: skills.split(',') } })
+      const skillIds = skillNames.map(skill => skill._id)
+      query.skills = { $in: skillIds }
+    }
+
+    if (author) {
+      const authorName = await User.findOne({ username: author })
+
+      if (authorName) {
+        query.author = authorName._id
+      } else {
+        return res.status(404).json({
+          message: 'Autor no encontrado',
+        })
+      }
+    }
+
+    const projects = await Project.find(query)
+
+    if (projects.length === 0) {
+      return res.status(404).json({
+        message:
+          'No hay proyectos que coincidan con los filtros proporcionados',
+      })
+    }
+
     res.json(projects)
   } catch (error) {
-    return res.status(404).json({ message: 'No hay proyectos' })
+    console.error(error)
+    res.status(500).json({ error: 'Error interno del servidor' })
   }
 }
 
@@ -24,51 +54,31 @@ const getById = async (req, res) => {
   res.json(project)
 }
 
-const getBySkill = async (req, res) => {
-  const { skill } = req.query
-
+const getFavorites = async (req, res) => {
   try {
-    const projects = await Project.find({ skill })
-    res.json(projects)
+    const userId = req.user.id
+
+    const user = await User.findById(userId).populate('favorites')
+
+    if (!user) {
+      return res.status(404).json({ message: 'Usuario no encontrado' })
+    }
+
+    const favorites = user.favorites
+
+    res.status(200).json({ favorites })
   } catch (error) {
-    res
-      .status(500)
-      .json({ message: 'Error al filtrar los proyectos por skill' })
+    console.error(error)
+    res.status(500).json({ message: 'Error interno del servidor' })
   }
 }
-
-const getByUser = async (req, res) => {
-  const { userId } = req.query
-
-  try {
-    const projects = await Project.find({ user: userId })
-    res.json(projects)
-  } catch (error) {
-    res.status(500).json({ message: 'Error al buscar proyectos por usuario' })
-  }
-}
-
 const create = async (req, res) => {
   try {
     const userId = req.user.id
 
-    const existingProject = await Project.findOne({
-      $or: [
-        { name: req.body.name },
-        { githublink: req.body.githublink },
-        { deploylink: req.body.deploylink },
-      ],
-    })
-
-    if (existingProject) {
-      return res
-        .status(400)
-        .json({ error: 'Ya existe un proyecto con esos datos' })
-    }
-
     const newProject = await Project.create({
       ...req.body,
-      user: new mongoose.Types.ObjectId(userId),
+      author: new mongoose.Types.ObjectId(userId),
     })
 
     const { skills } = req.body
@@ -96,17 +106,40 @@ const update = async (req, res) => {
 
     const existingProject = await Project.findOne({
       _id: projectId,
-      user: userId,
+      author: userId,
     })
 
     if (!existingProject) {
-      return res.status(404).json({ error: 'Proyecto no encontrado' })
+      return res.status(404).json({
+        error: 'Proyecto no encontrado o no tiene permisos para modificarlo.',
+      })
     }
+
+    const currentSkills = existingProject.skills
 
     const updatedProject = await Project.findByIdAndUpdate(
       projectId,
       { ...req.body },
       { new: true }
+    )
+
+    const updatedSkills = updatedProject.skills
+
+    const addedSkills = updatedSkills.filter(
+      skill => !currentSkills.includes(skill)
+    )
+    const deletedSkills = currentSkills.filter(
+      skill => !updatedSkills.includes(skill)
+    )
+
+    await Skill.updateMany(
+      { _id: { $in: addedSkills } },
+      { $push: { projects: updatedProject._id } }
+    )
+
+    await Skill.updateMany(
+      { _id: { $in: deletedSkills } },
+      { $pull: { projects: updatedProject._id } }
     )
 
     res.json(updatedProject)
@@ -116,22 +149,82 @@ const update = async (req, res) => {
   }
 }
 
-const remove = async (req, res) => {
-  const { projectId } = req.params
-  const deletedProject = await Project.findByIdAndDelete(projectId)
-  if (!deletedProject) {
-    return res.status(404).json({ message: 'Proyecto no encontrado' })
-  }
+const addFavorite = async (req, res) => {
+  try {
+    const { projectId } = req.params
+    const userId = req.user.id
 
-  res.json(deletedProject)
+    const project = await Project.findById(projectId)
+    if (!project) {
+      return res.status(404).json({ message: 'Proyecto no encontrado' })
+    }
+
+    const isFavorited = project.faved.includes(userId)
+
+    if (isFavorited) {
+      await Project.findByIdAndUpdate(projectId, {
+        $pull: { faved: userId },
+      })
+    } else {
+      await Project.findByIdAndUpdate(projectId, {
+        $push: { faved: userId },
+      })
+    }
+
+    const updateUser = isFavorited
+      ? await User.findByIdAndUpdate(
+          userId,
+          {
+            $pull: { favorites: projectId },
+          },
+          { new: true }
+        ).populate('favorites')
+      : await User.findByIdAndUpdate(
+          userId,
+          {
+            $push: { favorites: projectId },
+          },
+          { new: true }
+        ).populate('favorites')
+
+    const updatedProject = await Project.findById(projectId)
+
+    res.json({ project: updatedProject, user: updateUser })
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error interno del servidor' })
+  }
+}
+
+const remove = async (req, res) => {
+  try {
+    const { projectId } = req.params
+    const userId = req.user.id
+
+    const deletedProject = await Project.findOneAndDelete({
+      _id: projectId,
+      author: userId,
+    })
+
+    if (!deletedProject) {
+      return res.status(404).json({
+        msg: 'Proyecto no encontrado o no tiene permisos para eliminarlo.',
+      })
+    }
+
+    res.json(deletedProject)
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({ error: 'Error al eliminar el proyecto' })
+  }
 }
 
 module.exports = {
   getAll,
   getById,
-  getBySkill,
-  getByUser,
+  getFavorites,
   create,
   update,
+  addFavorite,
   remove,
 }

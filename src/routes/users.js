@@ -18,5 +18,5 @@ router.get(
   validate,
   userController.getById
 )
-router.get('/skill', userController.getBySkill)
+
 module.exports = router

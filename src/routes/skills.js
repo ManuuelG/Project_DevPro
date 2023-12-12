@@ -24,6 +24,7 @@ router.post('/', auth, skillValidationSchema, validate, skillController.create)
 router.put(
   '/:skillId',
   auth,
+  // admin,
   validateParamId('skillId'),
   skillValidationSchema,
   validate,
@@ -33,6 +34,7 @@ router.put(
 router.delete(
   '/:skillId',
   auth,
+  // admin,
   validateParamId('skillId'),
   validate,
   skillController.remove

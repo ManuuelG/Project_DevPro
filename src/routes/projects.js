@@ -11,6 +11,9 @@ const admin = require('../middlewares/admin')
 const router = Router()
 
 router.get('/', projectController.getAll)
+
+router.get('/favorites', auth, projectController.getFavorites)
+
 router.get(
   '/:projectId',
   auth,
@@ -18,8 +21,6 @@ router.get(
   validate,
   projectController.getById
 )
-router.get('/category', auth, projectController.getBySkill)
-router.get('/user', auth, projectController.getByUser)
 
 router.post(
   '/',
@@ -36,6 +37,14 @@ router.put(
   projectValidationSchema,
   validate,
   projectController.update
+)
+
+router.put(
+  '/favorites/:projectId',
+  auth,
+  validateParamId('projectId'),
+  validate,
+  projectController.addFavorite
 )
 
 router.delete(

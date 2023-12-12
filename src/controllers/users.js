@@ -9,7 +9,7 @@ const register = async (req, res) => {
 
   if (user) {
     return res.status(400).json({
-      message: 'Hemos encontrado un problema con el registro',
+      message: 'Ya existe un usuario',
     })
   }
 
@@ -45,7 +45,10 @@ const login = async (req, res) => {
       .json({ message: 'El usuario y contraseña no coincide' })
   }
 
-  const token = jwt.sign({ id: user._id }, process.env.privateKey)
+  const token = jwt.sign(
+    { id: user._id, isAdmin: user.isAdmin },
+    process.env.privateKey
+  )
 
   res.setHeader('Access-Control-Expose-Headers', 'x-auth-token')
   res.setHeader('x-auth-token', token)
@@ -80,17 +83,4 @@ const getById = async (req, res) => {
   }
 }
 
-const getBySkill = async (req, res) => {
-  const { skill } = req.query
-
-  try {
-    const users = await User.find({ skills: skill })
-      .select('username projects skills _id')
-      .lean()
-    res.json(users)
-  } catch (error) {
-    res.status(500).json({ message: 'Error al filtrar los usuarios por skill' })
-  }
-}
-
-module.exports = { register, login, getAll, getById, getBySkill }
+module.exports = { register, login, getAll, getById }

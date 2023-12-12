@@ -1,5 +1,6 @@
 const { User } = require('../models/user')
 const { Skill } = require('../models/skill')
+const { Project } = require('../models/project')
 const mongoose = require('mongoose')
 
 const getAll = async (req, res) => {
@@ -24,7 +25,6 @@ const getById = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    console.log(req.user)
     const userId = req.user.id
 
     const newSkillData = {
@@ -38,7 +38,6 @@ const create = async (req, res) => {
 
     res.json(newSkill)
   } catch (error) {
-    console.error(error)
     res.status(500).json({ error: 'Error al crear la skill' })
   }
 }
@@ -48,7 +47,7 @@ const update = async (req, res) => {
     const { skillId } = req.params
     const userId = req.user.id
 
-    const existingSkill = await Skill.findOne({
+    const existingSkill = await Skill.find({
       _id: skillId,
       user: userId,
     })
@@ -63,6 +62,11 @@ const update = async (req, res) => {
       { new: true }
     )
 
+    await Project.updateMany(
+      { skills: skillId },
+      { $set: { 'skills.$': updatedSkill._id } }
+    )
+
     res.json(updatedSkill)
   } catch (error) {
     console.error(error)
@@ -72,12 +76,17 @@ const update = async (req, res) => {
 
 const remove = async (req, res) => {
   const { skillId } = req.params
+
+  const removedSkill = await Skill.findById(skillId)
+
   const deletedSkill = await Skill.findByIdAndDelete(skillId)
   if (!deletedSkill) {
-    return res.status(404).json({ message: 'Skill no encontrado' })
+    return res.status(404).json({ message: 'Skill no encontrada' })
   }
 
-  res.json(deletedSkill)
+  await Project.updateMany({ skills: skillId }, { $pull: { skills: skillId } })
+
+  res.json(removedSkill)
 }
 
 module.exports = {

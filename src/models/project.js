@@ -1,13 +1,15 @@
 const mongoose = require('mongoose')
 const { body } = require('express-validator')
 
-const projectSchema = new mongoose.Schema({
+const Project = mongoose.model('Project', {
   name: { type: String, required: true, unique: true },
-  fecha: { type: Number },
+  date: { type: Number },
   image: { type: String, required: true },
-  githublink: { type: String, required: true },
-  deploylink: { type: String },
+  repolink: { type: String, required: true, unique: true },
+  deploylink: { type: String, unique: true },
   description: { type: String },
+  faved: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+  author: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
   skills: [
     {
       type: mongoose.Schema.Types.ObjectId,
@@ -17,15 +19,53 @@ const projectSchema = new mongoose.Schema({
   ],
 })
 
-const Project = mongoose.model('Project', projectSchema)
+const projectValidationSchema = [
+  body('name')
+    .notEmpty()
+    .withMessage('El nombre es obligatorio')
+    .custom(async (name, { req }) => {
+      const filter = { name }
 
-const projectValidationSchema = body('name').notEmpty()
-body('fecha').notEmpty()
-body('image').notEmpty()
-body('githublink').notEmpty()
-body('deploylink').notEmpty()
-body('skills').notEmpty()
+      if (req.params.projectId) {
+        filter['_id'] = { $ne: req.params.projectId }
+      }
+
+      const project = await Project.findOne(filter)
+      if (project) throw new Error('Ya hay un proyecto con ese nombre')
+    }),
+  body('date').notEmpty().isNumeric(),
+  body('image').notEmpty(),
+  body('repolink')
+    .notEmpty()
+    .withMessage('El enlace del repositorio es obligatorio')
+    .custom(async (repolink, { req }) => {
+      const filter = { repolink }
+
+      if (req.params.projectId) {
+        filter['_id'] = { $ne: req.params.projectId }
+      }
+
+      const project = await Project.findOne(filter)
+      if (project)
+        throw new Error('Ya hay un proyecto con ese enlace de repositorio')
+    }),
+  body('deploylink')
+    .optional({ checkFalsy: true })
+    .custom(async (deploylink, { req }) => {
+      if (deploylink) {
+        const filter = { deploylink }
+
+        if (req.params.projectId) {
+          filter['_id'] = { $ne: req.params.projectId }
+        }
+
+        const project = await Project.findOne(filter)
+        if (project)
+          throw new Error('Ya hay un proyecto con ese enlace de despliegue')
+      }
+    }),
+  body('skills').notEmpty(),
+]
 
 exports.projectValidationSchema = projectValidationSchema
-
 exports.Project = Project
