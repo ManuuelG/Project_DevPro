@@ -28,7 +28,14 @@ const getAll = async (req, res) => {
     }
 
     const projects = await Project.find(query)
-
+      .populate({
+        path: 'author',
+        select: 'username',
+      })
+      .populate({
+        path: 'skills',
+        select: 'name',
+      })
     if (projects.length === 0) {
       return res.status(404).json({
         message:
