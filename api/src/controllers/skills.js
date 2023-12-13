@@ -6,9 +6,14 @@ const mongoose = require('mongoose')
 const getAll = async (req, res) => {
   try {
     const skills = await Skill.find()
+
+    if (skills.length === 0) {
+      return res.status(404).json({ message: 'No hay skills' })
+    }
+
     res.json(skills)
   } catch (error) {
-    return res.status(404).json({ message: 'No hay skills' })
+    return res.status(500).json({ message: 'Algo inesperado ha ocurrido' })
   }
 }
 
@@ -67,6 +72,11 @@ const update = async (req, res) => {
       { $set: { 'skills.$': updatedSkill._id } }
     )
 
+    await User.updateMany(
+      { skills: skillId },
+      { $set: { 'skills.$': updatedSkill._id } }
+    )
+
     res.json(updatedSkill)
   } catch (error) {
     console.error(error)
@@ -85,6 +95,7 @@ const remove = async (req, res) => {
   }
 
   await Project.updateMany({ skills: skillId }, { $pull: { skills: skillId } })
+  await User.updateMany({ skills: skillId }, { $pull: { skills: skillId } })
 
   res.json(removedSkill)
 }

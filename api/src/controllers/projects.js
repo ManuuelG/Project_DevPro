@@ -72,6 +72,7 @@ const getFavorites = async (req, res) => {
     res.status(500).json({ message: 'Error interno del servidor' })
   }
 }
+
 const create = async (req, res) => {
   try {
     const userId = req.user.id
