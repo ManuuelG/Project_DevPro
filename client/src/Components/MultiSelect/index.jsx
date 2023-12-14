@@ -1,4 +1,3 @@
-// MultiSelect.jsx
 import { useState, useEffect } from 'react'
 import Box from '@mui/material/Box'
 import InputLabel from '@mui/material/InputLabel'
@@ -7,15 +6,15 @@ import FormControl from '@mui/material/FormControl'
 import Select from '@mui/material/Select'
 import Checkbox from '@mui/material/Checkbox'
 import ListItemText from '@mui/material/ListItemText'
-import axios from 'axios'
+import skillService from 'services/skill-service'
 
 function MultiSelect({ onSkillChange }) {
   const [skills, setSkills] = useState([])
   const [selectedSkills, setSelectedSkills] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/skills')
+    skillService
+      .get('/skills')
       .then(response => {
         setSkills(response.data)
       })

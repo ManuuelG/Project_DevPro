@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react'
 import TextField from '@mui/material/TextField'
 import Box from '@mui/material/Box'
-import axios from 'axios'
+import userService from 'services/user-service'
 
 function SearchBar({ onSearch, setError }) {
   const [searchUser, setsearchUser] = useState([])
+  const [users, setUsers] = useState([])
 
   useEffect(() => {
-    axios
-      .get('http://localhost:3000/api/users')
+    userService
+      .get()
       .then(response => {
         console.log(response.data)
       })
@@ -24,22 +25,21 @@ function SearchBar({ onSearch, setError }) {
   }
 
   return (
-    <Box sx={{ marginBottom: 2, width: '30%' }}>
-      <TextField
-        label="Search User..."
-        variant="outlined"
-        fullWidth
-        value={searchUser}
-        onChange={handleSearchChange}
-        error={false}
-        helperText={false}
-        sx={{
-          '& .MuiOutlinedInput-root': {
-            borderRadius: '25px',
-          },
-        }}
-      />
-    </Box>
+    <TextField
+      label="Search User..."
+      variant="outlined"
+      fullWidth
+      value={searchUser}
+      onChange={handleSearchChange}
+      error={false}
+      helperText={false}
+      sx={{
+        width: '30%',
+        '& .MuiOutlinedInput-root': {
+          borderRadius: '25px',
+        },
+      }}
+    />
   )
 }
 

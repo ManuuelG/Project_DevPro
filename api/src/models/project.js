@@ -3,7 +3,7 @@ const { body } = require('express-validator')
 
 const Project = mongoose.model('Project', {
   name: { type: String, required: true, unique: true },
-  date: { type: Number },
+  date: { type: Number, required: true },
   image: { type: String, required: true },
   repolink: { type: String, required: true, unique: true },
   deploylink: { type: String, unique: true },

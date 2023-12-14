@@ -14,8 +14,9 @@ import {
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
 import SettingsSystemDaydreamIcon from '@mui/icons-material/SettingsSystemDaydream'
+import { Link } from 'react-router-dom'
 
-const pages = ['Home', 'All Projects']
+const pages = ['Home', 'All Projects', 'Favorites']
 const settings = ['Register', 'Login', 'Logout']
 
 function Navbar() {
@@ -47,8 +48,8 @@ function Navbar() {
           <Typography
             variant="h6"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'none', md: 'flex' },
@@ -93,7 +94,9 @@ function Navbar() {
             >
               {pages.map(page => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
+                  <Typography textAlign="center" component={Link} to="/">
+                    {page}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -104,8 +107,8 @@ function Navbar() {
           <Typography
             variant="h5"
             noWrap
-            component="a"
-            href="#app-bar-with-responsive-menu"
+            component={Link}
+            to="/"
             sx={{
               mr: 2,
               display: { xs: 'flex', md: 'none' },
@@ -123,6 +126,8 @@ function Navbar() {
             {pages.map(page => (
               <Button
                 key={page}
+                component={Link}
+                to="/"
                 onClick={handleCloseNavMenu}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >

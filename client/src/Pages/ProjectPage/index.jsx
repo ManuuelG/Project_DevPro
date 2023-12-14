@@ -1,9 +1,9 @@
 import { useEffect, useState } from 'react'
-import { Container, Grid, Box, Typography } from '@mui/material'
+import { Container, Grid, Box, Button } from '@mui/material'
 import { ProjectCard, MultiSelect, SearchBar } from 'components'
-import axios from 'axios'
-
-const baseUrl = 'http://localhost:3000/api/projects'
+import projectService from 'services/project-service'
+import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
+import { Link } from 'react-router-dom'
 
 const ProjectPage = () => {
   const [projects, setProjects] = useState([])
@@ -11,8 +11,8 @@ const ProjectPage = () => {
   const [searchTerm, setSearchTerm] = useState('')
 
   useEffect(() => {
-    axios
-      .get(baseUrl)
+    projectService
+      .get()
       .then(response => {
         console.log(response.data)
         setProjects(response.data)
@@ -54,6 +54,17 @@ const ProjectPage = () => {
         }}
       >
         {' '}
+        <Button
+          variant="contained"
+          component={Link}
+          to="/projects/new"
+          sx={{
+            backgroundColor: 'red',
+            gap: 1,
+          }}
+        >
+          <CreateNewFolderIcon /> Nuevo Proyecto
+        </Button>
         <SearchBar onSearch={handleSearch} />
         <MultiSelect onSkillChange={handleSkillChange} />
       </Box>
@@ -69,7 +80,7 @@ const ProjectPage = () => {
               marginTop: 2,
             }}
             alt="Meme"
-            src="/public/meme.png"
+            src="/meme.png"
           />
         ) : (
           filteredProjects.map(project => (

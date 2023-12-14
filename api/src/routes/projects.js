@@ -12,11 +12,11 @@ const router = Router()
 
 router.get('/', projectController.getAll)
 
-router.get('/favorites', auth, projectController.getFavorites)
+router.get('/favorites', /* auth, */ projectController.getFavorites)
 
 router.get(
   '/:projectId',
-  auth,
+  /* auth, */
   validateParamId('projectId'),
   validate,
   projectController.getById
@@ -24,7 +24,7 @@ router.get(
 
 router.post(
   '/',
-  auth,
+  /* auth, */
   projectValidationSchema,
   validate,
   projectController.create
@@ -32,7 +32,7 @@ router.post(
 
 router.put(
   '/:projectId',
-  auth,
+  /* auth, */
   validateParamId('projectId'),
   projectValidationSchema,
   validate,
@@ -41,7 +41,7 @@ router.put(
 
 router.put(
   '/favorites/:projectId',
-  auth,
+  /* auth, */
   validateParamId('projectId'),
   validate,
   projectController.addFavorite
@@ -49,7 +49,7 @@ router.put(
 
 router.delete(
   '/:projectId',
-  auth,
+  /* auth, */
   validateParamId('projectId'),
   validate,
   projectController.remove

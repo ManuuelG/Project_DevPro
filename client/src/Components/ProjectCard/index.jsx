@@ -41,7 +41,7 @@ function ProjectCard({ project }) {
           {name}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {author.username}
+          {author?.username}
         </Typography>
         <Typography variant="body2" color="text.secondary">
           {skills.map(skill => skill.name).join(', ')}

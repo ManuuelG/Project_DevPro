@@ -2,8 +2,6 @@ const { Project } = require('../models/project')
 const { User } = require('../models/user')
 const { Skill } = require('../models/skill')
 
-const mongoose = require('mongoose')
-
 const getAll = async (req, res) => {
   try {
     const { skills, author } = req.query
@@ -82,11 +80,11 @@ const getFavorites = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    const userId = req.user.id
+    // const userId = req.user.id
 
     const newProject = await Project.create({
       ...req.body,
-      author: new mongoose.Types.ObjectId(userId),
+      // author: new mongoose.Types.ObjectId(userId),
     })
 
     const { skills } = req.body
@@ -96,14 +94,16 @@ const create = async (req, res) => {
       { $push: { projects: newProject._id } }
     )
 
-    await User.findByIdAndUpdate(userId, {
-      $push: { projects: newProject._id },
-    })
+    // await User.findByIdAndUpdate(userId, {
+    //   $push: { projects: newProject._id },
+    // })
 
     res.json(newProject)
   } catch (error) {
     console.error(error)
-    res.status(500).json({ error: 'Error al crear el proyecto' })
+    res
+      .status(500)
+      .json({ error: 'Error al crear el proyecto', details: error.message })
   }
 }
 
