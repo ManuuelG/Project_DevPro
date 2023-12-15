@@ -1,12 +1,15 @@
 import { useEffect, useState } from 'react'
-import { Container, Grid, Box, Button } from '@mui/material'
+import { Container, Grid, Box, Button, CircularProgress } from '@mui/material'
 import { ProjectCard, MultiSelect, SearchBar } from 'components'
 import projectService from 'services/project-service'
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import { Link } from 'react-router-dom'
+import { useProjects } from 'hooks'
+import { useNavigate } from 'react-router-dom'
 
 const ProjectPage = () => {
-  const [projects, setProjects] = useState([])
+  const navigate = useNavigate()
+  const { projects, loading, errors, setProjects } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
 
@@ -14,8 +17,6 @@ const ProjectPage = () => {
     projectService
       .get()
       .then(response => {
-        console.log(response.data)
-        setProjects(response.data)
         setFilteredProjects(response.data)
       })
       .catch(error => {
@@ -38,10 +39,22 @@ const ProjectPage = () => {
     setSearchTerm(term)
 
     const filtered = projects.filter(project =>
-      project.author.username.toLowerCase().includes(term.toLowerCase())
+      project.author?.username.toLowerCase().includes(term.toLowerCase())
     )
     setFilteredProjects(filtered)
+    console.log(filtered)
   }
+
+  const handleEdit = projectId => navigate('projects/edit/' + projectId)
+  const handleDelete = projectId =>
+    projectService
+      .delete(projectId)
+      .then(({ data }) =>
+        setProjects(projects.filter(projects => projects._id !== data._id))
+      )
+      .catch(err => console.log(err))
+
+  if (loading) return <CircularProgress />
 
   return (
     <Container maxWidth="xl" sx={{ mt: 5 }}>
@@ -84,8 +97,12 @@ const ProjectPage = () => {
           />
         ) : (
           filteredProjects.map(project => (
-            <Grid item key={project.id} xs={12} sm={6} md={4} lg={3}>
-              <ProjectCard project={project} />
+            <Grid item key={project._id} xs={12} sm={6} md={4} lg={3}>
+              <ProjectCard
+                project={project}
+                onEdit={() => handleEdit(project._id)}
+                onDelete={() => handleDelete(project._id)}
+              />
             </Grid>
           ))
         )}

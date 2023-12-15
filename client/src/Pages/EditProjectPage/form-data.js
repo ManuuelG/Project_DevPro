@@ -1,5 +1,7 @@
 import * as yup from 'yup'
 
+import _ from 'lodash'
+
 const fields = [
   { name: 'name', label: 'Nombre', placeholder: 'Nombre del proyecto' },
   { name: 'date', label: 'Fecha', type: 'number' },
@@ -44,4 +46,15 @@ const schema = yup
   })
   .required()
 
-export { fields, schema }
+const getDefaultValues = project =>
+  _.pick(project, [
+    'name',
+    'date',
+    'image',
+    'repolink',
+    'deploylink',
+    'description',
+    'skills',
+  ])
+
+export { fields, schema, getDefaultValues }

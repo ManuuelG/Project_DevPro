@@ -22,14 +22,6 @@ function CreateProjectPage() {
       })
   }, [])
 
-  console.log(skills)
-  console.log(
-    skills.map(skill => ({
-      value: skill._id,
-      label: skill.name,
-    }))
-  )
-
   const onSubmit = (project, { reset }) => {
     console.log('Proyecto:', project)
 

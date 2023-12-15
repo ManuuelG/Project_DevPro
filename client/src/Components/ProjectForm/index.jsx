@@ -1,5 +1,5 @@
 import { Button, Stack } from '@mui/material'
-import { useForm } from 'react-hook-form'
+import { useForm, Controller } from 'react-hook-form'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useEffect } from 'react'
 
@@ -16,6 +16,7 @@ function ProjectForm({
   const {
     register,
     handleSubmit,
+    control,
     reset,
     setError,
     formState: { errors },
@@ -37,6 +38,26 @@ function ProjectForm({
     >
       {inputs.map(({ name, type, ...rest }) => {
         const Input = fields[type] || fields.input
+
+        if (type === 'select') {
+          return (
+            <Controller
+              key={name}
+              name={name}
+              control={control}
+              defaultValue={[]}
+              render={({ field }) => (
+                <Input
+                  type={type}
+                  errors={errors[name]}
+                  inputRef={field.ref}
+                  {...field}
+                  {...rest}
+                />
+              )}
+            />
+          )
+        }
 
         const { ref, ...registerProps } = register(name)
 

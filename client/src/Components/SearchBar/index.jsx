@@ -10,9 +10,7 @@ function SearchBar({ onSearch, setError }) {
   useEffect(() => {
     userService
       .get()
-      .then(response => {
-        console.log(response.data)
-      })
+      .then(response => {})
       .catch(error => {
         console.error('Error fetching user data', error)
       })

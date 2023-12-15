@@ -7,9 +7,11 @@ import IconButton from '@mui/material/Button'
 import Typography from '@mui/material/Typography'
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
+import EditIcon from '@mui/icons-material/Edit'
+import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { useState, useEffect } from 'react'
 
-function ProjectCard({ project }) {
+function ProjectCard({ project, onEdit, onDelete }) {
   const { name, image, author, skills, faved } = project
   const [isFaved, setIsFaved] = useState(false)
 
@@ -56,6 +58,14 @@ function ProjectCard({ project }) {
       >
         <IconButton size="small" onClick={handleToggleFaved}>
           {!isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+        </IconButton>
+        <IconButton size="small" onClick={onEdit}>
+          {' '}
+          <EditIcon />
+        </IconButton>
+        <IconButton size="small" onClick={onDelete}>
+          {' '}
+          <HighlightOffIcon />
         </IconButton>
       </CardActions>
     </Card>

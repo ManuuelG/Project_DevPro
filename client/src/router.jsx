@@ -6,7 +6,7 @@ import RootLayout from 'layouts/RootLayout'
 import ErrorPage from 'pages/ErrorPage'
 import ProjectPage from 'pages/ProjectPage'
 import AddProjectPage from 'pages/AddProjectPage'
-// import EditProjectPage from 'pages/EditProjectPage'
+import EditProjectPage from 'pages/EditProjectPage'
 // import RegisterPage from 'pages/RegisterPage'
 // import LoginPage from 'pages/LoginPage'
 // import LogoutPage from 'pages/LogoutPage'
@@ -30,8 +30,8 @@ const router = createBrowserRouter([
         element: <AddProjectPage />,
       },
       {
-        path: '/customer/edit/:customerId',
-        element: false,
+        path: '/projects/edit/:projectId',
+        element: <EditProjectPage />,
       },
       {
         path: '/login',

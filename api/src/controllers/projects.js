@@ -110,11 +110,11 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { projectId } = req.params
-    const userId = req.user.id
+    // const userId = req.user.id
 
     const existingProject = await Project.findOne({
       _id: projectId,
-      author: userId,
+      // author: userId,
     })
 
     if (!existingProject) {
@@ -207,11 +207,11 @@ const addFavorite = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const { projectId } = req.params
-    const userId = req.user.id
+    // const userId = req.user.id
 
     const deletedProject = await Project.findOneAndDelete({
       _id: projectId,
-      author: userId,
+      // author: userId,
     })
 
     if (!deletedProject) {
