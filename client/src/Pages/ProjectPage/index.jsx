@@ -54,6 +54,8 @@ const ProjectPage = () => {
       )
       .catch(err => console.log(err))
 
+  console.log(projects)
+
   if (loading) return <CircularProgress />
 
   return (
