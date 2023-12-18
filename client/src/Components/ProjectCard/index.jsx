@@ -11,7 +11,13 @@ import EditIcon from '@mui/icons-material/Edit'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import { useState, useEffect } from 'react'
 
-function ProjectCard({ project, onEdit, onDelete }) {
+function ProjectCard({
+  project,
+  onEdit,
+  onDelete,
+  showActions,
+  canEditAndDelete,
+}) {
   const { name, image, author, skills, faved } = project
   const [isFaved, setIsFaved] = useState(false)
 
@@ -56,17 +62,26 @@ function ProjectCard({ project, onEdit, onDelete }) {
           alignItems: 'center',
         }}
       >
-        <IconButton size="small" onClick={handleToggleFaved}>
-          {!isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
-        </IconButton>
-        <IconButton size="small" onClick={onEdit}>
-          {' '}
-          <EditIcon />
-        </IconButton>
-        <IconButton size="small" onClick={onDelete}>
-          {' '}
-          <HighlightOffIcon />
-        </IconButton>
+        {showActions && (
+          <>
+            <IconButton size="small" onClick={handleToggleFaved}>
+              {!isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </IconButton>
+
+            {canEditAndDelete && (
+              <>
+                <IconButton size="small" onClick={onEdit}>
+                  {' '}
+                  <EditIcon />
+                </IconButton>
+                <IconButton size="small" onClick={onDelete}>
+                  {' '}
+                  <HighlightOffIcon />
+                </IconButton>
+              </>
+            )}
+          </>
+        )}
       </CardActions>
     </Card>
   )

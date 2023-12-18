@@ -103,9 +103,9 @@ function ProjectPage() {
             <Grid item key={project._id} xs={12} sm={6} md={4} lg={3}>
               <ProjectCard
                 project={project}
+                showActions={auth}
                 onEdit={() => handleEdit(project._id)}
                 onDelete={() => handleDelete(project._id)}
-                showActions={auth}
                 canEditAndDelete={auth && username === project.author?.username}
               />
             </Grid>

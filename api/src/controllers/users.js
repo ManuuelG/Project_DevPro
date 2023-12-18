@@ -18,7 +18,10 @@ const register = async (req, res) => {
 
   const newUser = await User.create({ username, password })
 
-  const token = jwt.sign({ id: newUser._id }, process.env.privateKey)
+  const token = jwt.sign(
+    { id: newUser._id, username: newUser.username },
+    process.env.privateKey
+  )
 
   res.setHeader('Access-Control-Expose-Headers', 'x-auth-token')
   res.setHeader('x-auth-token', token)
@@ -46,7 +49,7 @@ const login = async (req, res) => {
   }
 
   const token = jwt.sign(
-    { id: user._id, isAdmin: user.isAdmin },
+    { id: user._id, isAdmin: user.isAdmin, username: user.username },
     process.env.privateKey
   )
 
