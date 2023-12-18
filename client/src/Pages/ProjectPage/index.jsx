@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom'
 import { useProjects } from 'hooks'
 import { useNavigate } from 'react-router-dom'
 
-const ProjectPage = () => {
+function ProjectPage() {
   const navigate = useNavigate()
   const { projects, loading, errors, setProjects } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
@@ -42,7 +42,6 @@ const ProjectPage = () => {
       project.author?.username.toLowerCase().includes(term.toLowerCase())
     )
     setFilteredProjects(filtered)
-    console.log(filtered)
   }
 
   const handleEdit = projectId => navigate('projects/edit/' + projectId)
@@ -50,11 +49,11 @@ const ProjectPage = () => {
     projectService
       .delete(projectId)
       .then(({ data }) =>
-        setProjects(projects.filter(projects => projects._id !== data._id))
+        setFilteredProjects(
+          filteredProjects.filter(projects => projects._id !== data._id)
+        )
       )
       .catch(err => console.log(err))
-
-  console.log(projects)
 
   if (loading) return <CircularProgress />
 

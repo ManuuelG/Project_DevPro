@@ -4,39 +4,44 @@ import {
   Box,
   Toolbar,
   IconButton,
-  Typography,
-  Menu,
   Container,
   Avatar,
   Button,
   Tooltip,
+  Typography,
   MenuItem,
+  Menu,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined'
+import FolderSpecialOutlinedIcon from '@mui/icons-material/FolderSpecialOutlined'
+import FolderOutlinedIcon from '@mui/icons-material/FolderOutlined'
 import SettingsSystemDaydreamIcon from '@mui/icons-material/SettingsSystemDaydream'
 import { Link } from 'react-router-dom'
-
-const pages = ['Home', 'All Projects', 'Favorites']
-const settings = ['Register', 'Login', 'Logout']
+import { useAuth } from 'hooks'
 
 function Navbar() {
+  const [user] = useAuth()
   const [anchorElNav, setAnchorElNav] = React.useState(null)
   const [anchorElUser, setAnchorElUser] = React.useState(null)
 
-  const handleOpenNavMenu = event => {
-    setAnchorElNav(event.currentTarget)
-  }
-  const handleOpenUserMenu = event => {
-    setAnchorElUser(event.currentTarget)
-  }
+  const handleOpenNavMenu = event => setAnchorElNav(event.currentTarget)
+  const handleOpenUserMenu = event => setAnchorElUser(event.currentTarget)
 
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null)
-  }
+  const optionsMainMenu = user.auth
+    ? [
+        { label: <HomeOutlinedIcon />, to: '/' },
+        { label: <FolderOutlinedIcon />, to: '/' },
+        { label: <FolderSpecialOutlinedIcon />, to: '/favorites' },
+      ]
+    : [{ label: <FolderOutlinedIcon />, to: '/' }]
 
-  const handleCloseUserMenu = () => {
-    setAnchorElUser(null)
-  }
+  const optionsUserMenu = user.auth
+    ? [{ label: 'Logout', to: '/logout' }]
+    : [
+        { label: 'Login', to: '/login' },
+        { label: 'Register', to: '/register' },
+      ]
 
   return (
     <AppBar position="static" sx={{ backgroundColor: 'black' }}>
@@ -87,15 +92,23 @@ function Navbar() {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={() => setAnchorElNav(null)}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map(page => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center" component={Link} to="/">
-                    {page}
+              {optionsMainMenu.map(option => (
+                <MenuItem
+                  key={option.label}
+                  onClick={() => setAnchorElNav(null)}
+                >
+                  <Typography
+                    textAlign="center"
+                    component={Link}
+                    to={option.to}
+                    sx={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {option.label}
                   </Typography>
                 </MenuItem>
               ))}
@@ -123,15 +136,14 @@ function Navbar() {
             DevPro
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map(page => (
+            {optionsMainMenu.map(option => (
               <Button
-                key={page}
+                key={option.label}
                 component={Link}
-                to="/"
-                onClick={handleCloseNavMenu}
+                to={option.to}
                 sx={{ my: 2, color: 'white', display: 'block' }}
               >
-                {page}
+                {option.label}
               </Button>
             ))}
           </Box>
@@ -139,15 +151,15 @@ function Navbar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+                <Avatar alt="Remy Sharp" src="" sx={{ cursor: 'pointer' }} />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: 1, mr: 1 }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
+                vertical: 'bottom',
                 horizontal: 'right',
               }}
               keepMounted
@@ -156,11 +168,21 @@ function Navbar() {
                 horizontal: 'right',
               }}
               open={Boolean(anchorElUser)}
-              onClose={handleCloseUserMenu}
+              onClose={() => setAnchorElUser(null)}
             >
-              {settings.map(setting => (
-                <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                  <Typography textAlign="center">{setting}</Typography>
+              {optionsUserMenu.map(option => (
+                <MenuItem
+                  key={option.label}
+                  onClick={() => setAnchorElUser(null)}
+                >
+                  <Typography
+                    textAlign="center"
+                    component={Link}
+                    to={option.to}
+                    sx={{ color: 'inherit', textDecoration: 'none' }}
+                  >
+                    {option.label}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>
@@ -170,4 +192,5 @@ function Navbar() {
     </AppBar>
   )
 }
+
 export default Navbar

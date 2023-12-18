@@ -73,7 +73,9 @@ function ProjectForm({
         )
       })}
 
-      <Button type="submit">{submitLabel}</Button>
+      <Button type="submit" sx={{ mt: 3, mb: 2 }} fullWidth variant="contained">
+        {submitLabel}
+      </Button>
     </Stack>
   )
 }
