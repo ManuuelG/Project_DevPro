@@ -1,60 +1,82 @@
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Container, Grid, Box, Button, CircularProgress } from '@mui/material'
-import { ProjectCard, MultiSelect, SearchBar } from 'components'
+import { ProjectCard, MultiSelect } from 'components'
 import projectService from 'services/project-service'
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import { Link } from 'react-router-dom'
 import { useProjects, useAuth } from 'hooks'
 import { useNavigate } from 'react-router-dom'
 
-function ProjectPage() {
+function MyProjectPage() {
   const navigate = useNavigate()
+  const [{ auth, username }] = useAuth()
   const { projects, loading, errors, setProjects } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
-  const [searchTerm, setSearchTerm] = useState('')
-  const [{ auth, username }] = useAuth()
 
   useEffect(() => {
-    projectService
-      .get()
-      .then(response => {
-        setFilteredProjects(response.data)
-      })
-      .catch(error => {
-        console.error('Error fetching data', error)
-      })
-  }, [])
+    if (username) {
+      projectService
+        .get()
+        .then(response => {
+          const userProjects = response.data.filter(
+            project => project.author.username === username
+          )
+          setFilteredProjects(userProjects)
+        })
+        .catch(error => {
+          console.error('Error fetching data', error)
+        })
+    }
+  }, [username])
 
   const handleSkillChange = selectedSkills => {
     if (selectedSkills.length === 0) {
-      setFilteredProjects(projects)
+      projectService
+        .get()
+        .then(response => {
+          const userProjects = response.data.filter(
+            project => project.author.username === username
+          )
+          setFilteredProjects(userProjects)
+        })
+        .catch(error => {
+          console.error('Error fetching data', error)
+        })
     } else {
-      const filtered = projects.filter(project =>
+      const filtered = filteredProjects.filter(project =>
         project.skills.some(skill => selectedSkills.includes(skill.name))
       )
       setFilteredProjects(filtered)
     }
   }
 
-  const handleSearch = term => {
-    setSearchTerm(term)
-
-    const filtered = projects.filter(project =>
-      project.author?.username.toLowerCase().includes(term.toLowerCase())
-    )
-    setFilteredProjects(filtered)
-  }
-
   const handleEdit = projectId => navigate('projects/edit/' + projectId)
   const handleDelete = projectId =>
     projectService
       .delete(projectId)
-      .then(({ data }) =>
-        setFilteredProjects(
-          filteredProjects.filter(projects => projects._id !== data._id)
+      .then(({ data }) => {
+        setFilteredProjects(prevProjects =>
+          prevProjects.filter(project => project._id !== data._id)
+        )
+      })
+      .catch(err => console.log(err))
+
+  const handleToggleFav = projectId => {
+    projectService
+      .addFav(projectId)
+      .then(() =>
+        setFilteredProjects(prevProjects =>
+          prevProjects.map(project =>
+            project._id === projectId
+              ? { ...project, faved: !project.faved }
+              : project
+          )
         )
       )
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.error('Error dando fav desde page', err)
+      })
+  }
 
   if (loading) return <CircularProgress />
 
@@ -74,14 +96,12 @@ function ProjectPage() {
             component={Link}
             to="/projects/new"
             sx={{
-              backgroundColor: 'red',
               gap: 1,
             }}
           >
-            <CreateNewFolderIcon /> Nuevo Proyecto
+            <CreateNewFolderIcon /> New Project
           </Button>
         )}
-        <SearchBar onSearch={handleSearch} />
         <MultiSelect onSkillChange={handleSkillChange} />
       </Box>
       <Grid container spacing={2} sx={{ marginTop: 2, marginBottom: 2 }}>
@@ -104,6 +124,7 @@ function ProjectPage() {
               <ProjectCard
                 project={project}
                 showActions={auth}
+                onFav={handleToggleFav}
                 onEdit={() => handleEdit(project._id)}
                 onDelete={() => handleDelete(project._id)}
                 canEditAndDelete={auth && username === project.author?.username}
@@ -116,4 +137,4 @@ function ProjectPage() {
   )
 }
 
-export default ProjectPage
+export default MyProjectPage

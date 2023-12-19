@@ -31,7 +31,7 @@ function Navbar() {
   const optionsMainMenu = user.auth
     ? [
         { label: <HomeOutlinedIcon />, to: '/' },
-        { label: <FolderOutlinedIcon />, to: '/' },
+        { label: <FolderOutlinedIcon />, to: '/myprojects' },
         { label: <FolderSpecialOutlinedIcon />, to: '/favorites' },
       ]
     : [{ label: <FolderOutlinedIcon />, to: '/' }]

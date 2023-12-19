@@ -31,14 +31,6 @@ function MultiSelect({ onSkillChange }) {
     onSkillChange(selectedValues)
   }
 
-  const getRandomColor = () => {
-    const randomColor = `rgb(${Math.floor(Math.random() * 256)}, ${Math.floor(
-      Math.random() * 256
-    )}, ${Math.floor(Math.random() * 256)})`
-
-    return randomColor
-  }
-
   return (
     <Box sx={{ width: '20%' }}>
       <FormControl fullWidth>
@@ -46,29 +38,37 @@ function MultiSelect({ onSkillChange }) {
         <Select
           labelId="skills-select-label"
           id="skills-select"
+          inputProps={{ sx: { backgroundColor: '#EEEEEE' } }}
           multiple
           value={selectedSkills}
           onChange={handleChange}
           label="Skills"
           renderValue={selected => (
             <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
-              {selected.map(value => (
-                <Box
-                  key={value}
-                  sx={{ display: 'flex', alignItems: 'center', marginRight: 1 }}
-                >
-                  <span
-                    style={{
-                      backgroundColor: getRandomColor(),
-                      borderRadius: '50%',
-                      width: '12px',
-                      height: '12px',
-                      marginRight: '4px',
+              {selected.map(value => {
+                const selectedSkill = skills.find(skill => skill.name === value)
+                return (
+                  <Box
+                    key={value}
+                    sx={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      marginRight: 1,
                     }}
-                  ></span>
-                  <span>{value}</span>
-                </Box>
-              ))}
+                  >
+                    <span
+                      style={{
+                        backgroundColor: selectedSkill?.color || '#000000',
+                        borderRadius: '50%',
+                        width: '12px',
+                        height: '12px',
+                        marginRight: '4px',
+                      }}
+                    ></span>
+                    <span>{value}</span>
+                  </Box>
+                )
+              })}
             </Box>
           )}
         >

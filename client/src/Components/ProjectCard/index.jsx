@@ -9,12 +9,15 @@ import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder'
 import FavoriteIcon from '@mui/icons-material/Favorite'
 import EditIcon from '@mui/icons-material/Edit'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
+import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined'
 import { useState, useEffect } from 'react'
 
 function ProjectCard({
   project,
   onEdit,
   onDelete,
+  onFav,
+  onDetails,
   showActions,
   canEditAndDelete,
 }) {
@@ -25,13 +28,26 @@ function ProjectCard({
     setIsFaved(faved)
   }, [faved])
 
-  const handleToggleFaved = () => {
-    setIsFaved(!isFaved)
-    onToggleFaved(project)
+  const handleToggleFaved = async () => {
+    try {
+      await onFav(project._id)
+      setIsFaved(prevFaved => !prevFaved)
+    } catch (error) {
+      console.error('Error dando fav desde card', error)
+    }
   }
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card
+      sx={{
+        maxWidth: 345,
+        backgroundColor: '#EEEEEE',
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 0 10px rgba(7, 59, 76, 0.5)',
+        },
+      }}
+    >
       <CardMedia
         sx={{ height: 140, backgroundSize: 'contain' }}
         image={image}
@@ -66,6 +82,10 @@ function ProjectCard({
           <>
             <IconButton size="small" onClick={handleToggleFaved}>
               {!isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+            </IconButton>
+            <IconButton size="small" onClick={onDetails}>
+              {' '}
+              <PageviewOutlinedIcon />
             </IconButton>
 
             {canEditAndDelete && (

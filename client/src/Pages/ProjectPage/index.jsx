@@ -19,6 +19,18 @@ function ProjectPage() {
       .get()
       .then(response => {
         setFilteredProjects(response.data)
+        console.log(response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching data', error)
+      })
+  }, [])
+
+  useEffect(() => {
+    projectService
+      .getFav()
+      .then(response => {
+        console.log(response.data)
       })
       .catch(error => {
         console.error('Error fetching data', error)
@@ -56,6 +68,25 @@ function ProjectPage() {
       )
       .catch(err => console.log(err))
 
+  const handleToggleFav = projectId => {
+    projectService
+      .addFav(projectId)
+      .then(() =>
+        setFilteredProjects(prevProjects =>
+          prevProjects.map(project =>
+            project._id === projectId
+              ? { ...project, faved: !project.faved }
+              : project
+          )
+        )
+      )
+      .catch(err => {
+        console.error('Error dando fav desde page', err)
+      })
+  }
+
+  const handleViewDetails = projectId => navigate('/' + projectId)
+
   if (loading) return <CircularProgress />
 
   return (
@@ -74,17 +105,16 @@ function ProjectPage() {
             component={Link}
             to="/projects/new"
             sx={{
-              backgroundColor: 'red',
               gap: 1,
             }}
           >
-            <CreateNewFolderIcon /> Nuevo Proyecto
+            <CreateNewFolderIcon /> New Project
           </Button>
         )}
         <SearchBar onSearch={handleSearch} />
         <MultiSelect onSkillChange={handleSkillChange} />
       </Box>
-      <Grid container spacing={2} sx={{ marginTop: 2, marginBottom: 2 }}>
+      <Grid container spacing={2} sx={{ marginTop: 2, paddingBottom: 2 }}>
         {filteredProjects.length === 0 ? (
           <Box
             component="img"
@@ -105,6 +135,8 @@ function ProjectPage() {
                 project={project}
                 onEdit={() => handleEdit(project._id)}
                 onDelete={() => handleDelete(project._id)}
+                onFav={handleToggleFav}
+                onDetails={() => handleViewDetails(project._id)}
                 showActions={auth}
                 canEditAndDelete={auth && username === project.author?.username}
               />

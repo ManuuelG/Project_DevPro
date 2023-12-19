@@ -64,6 +64,7 @@ function ProjectForm({
         return (
           <Input
             key={name}
+            autoComplete="off"
             type={type}
             errors={errors[name]}
             inputRef={ref}

@@ -13,7 +13,7 @@ function useProject(projectId) {
       .catch(errors => setErrors(errors))
       .finally(() => setLoading(false))
   }, [])
-  return { project, loading, errors }
+  return { project, loading, errors, setProject }
 }
 
 export default useProject

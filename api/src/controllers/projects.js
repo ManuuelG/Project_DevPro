@@ -1,6 +1,7 @@
 const { Project } = require('../models/project')
 const { User } = require('../models/user')
 const { Skill } = require('../models/skill')
+const mongoose = require('mongoose')
 
 const getAll = async (req, res) => {
   try {
@@ -80,11 +81,11 @@ const getFavorites = async (req, res) => {
 
 const create = async (req, res) => {
   try {
-    // const userId = req.user.id
+    const userId = req.user.id
 
     const newProject = await Project.create({
       ...req.body,
-      // author: new mongoose.Types.ObjectId(userId),
+      author: new mongoose.Types.ObjectId(userId),
     })
 
     const { skills } = req.body
@@ -94,9 +95,9 @@ const create = async (req, res) => {
       { $push: { projects: newProject._id } }
     )
 
-    // await User.findByIdAndUpdate(userId, {
-    //   $push: { projects: newProject._id },
-    // })
+    await User.findByIdAndUpdate(userId, {
+      $push: { projects: newProject._id },
+    })
 
     res.json(newProject)
   } catch (error) {
@@ -110,11 +111,11 @@ const create = async (req, res) => {
 const update = async (req, res) => {
   try {
     const { projectId } = req.params
-    // const userId = req.user.id
+    const userId = req.user.id
 
     const existingProject = await Project.findOne({
       _id: projectId,
-      // author: userId,
+      author: userId,
     })
 
     if (!existingProject) {
@@ -207,11 +208,11 @@ const addFavorite = async (req, res) => {
 const remove = async (req, res) => {
   try {
     const { projectId } = req.params
-    // const userId = req.user.id
+    const userId = req.user.id
 
     const deletedProject = await Project.findOneAndDelete({
       _id: projectId,
-      // author: userId,
+      author: userId,
     })
 
     if (!deletedProject) {

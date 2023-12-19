@@ -3,6 +3,7 @@ import {
   ThemeProvider as MUIThemeProvider,
 } from '@mui/material/styles'
 import { CssBaseline } from '@mui/material'
+import '@fontsource/anton'
 
 const theme = createTheme({
   palette: {
@@ -24,6 +25,7 @@ const theme = createTheme({
   },
 
   typography: {
+    fontFamily: 'Anton, sans-serif',
     h2: {
       fontSize: '2.5rem',
     },
@@ -33,8 +35,18 @@ const theme = createTheme({
 const ThemeProvider = ({ children }) => (
   <MUIThemeProvider theme={theme}>
     <CssBaseline />
+    <div
+      style={{
+        minHeight: '100vh',
+        background:
+          'linear-gradient(90deg, hsla(217, 100%, 50%, 1) 0%, hsla(186, 100%, 69%, 1) 100%)',
 
-    {children}
+        filter:
+          'progid:DXImageTransform.Microsoft.gradient(startColorstr="#0061FF", endColorstr="#60EFFF", GradientType=1)',
+      }}
+    >
+      {children}
+    </div>
   </MUIThemeProvider>
 )
 

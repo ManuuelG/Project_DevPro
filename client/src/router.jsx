@@ -3,8 +3,10 @@ import { createBrowserRouter } from 'react-router-dom'
 import RootLayout from 'layouts/RootLayout'
 import ErrorPage from 'pages/ErrorPage'
 import ProjectPage from 'pages/ProjectPage'
+import MyProjectPage from './Pages/MyProjectsPage'
 import AddProjectPage from 'pages/AddProjectPage'
 import EditProjectPage from 'pages/EditProjectPage'
+import ProjectPageDetails from 'pages/ProjectPageDetails'
 import RegisterPage from 'pages/RegisterPage'
 import LoginPage from 'pages/LoginPage'
 import LogoutPage from 'pages/LogoutPage'
@@ -20,8 +22,12 @@ const router = createBrowserRouter([
         element: <ProjectPage />,
       },
       {
-        path: '/customers',
-        element: false,
+        path: '/myprojects',
+        element: <MyProjectPage />,
+      },
+      {
+        path: '/:projectId',
+        element: <ProjectPageDetails />,
       },
       {
         path: '/projects/new',

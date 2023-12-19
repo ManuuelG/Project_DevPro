@@ -31,20 +31,20 @@ router.post(
 )
 
 router.put(
+  '/favorites/:projectId',
+  auth,
+  validateParamId('projectId'),
+  validate,
+  projectController.addFavorite
+)
+
+router.put(
   '/:projectId',
   auth,
   validateParamId('projectId'),
   projectValidationSchema,
   validate,
   projectController.update
-)
-
-router.put(
-  '/favorites/:projectId',
-  auth,
-  validateParamId('projectId'),
-  validate,
-  projectController.addFavorite
 )
 
 router.delete(

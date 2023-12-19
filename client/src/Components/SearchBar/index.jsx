@@ -31,6 +31,7 @@ function SearchBar({ onSearch, setError }) {
       onChange={handleSearchChange}
       error={false}
       helperText={false}
+      inputProps={{ sx: { backgroundColor: '#EEEEEE', borderRadius: '25px' } }}
       sx={{
         width: '30%',
         '& .MuiOutlinedInput-root': {

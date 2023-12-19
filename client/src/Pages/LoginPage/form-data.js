@@ -7,7 +7,7 @@ const fields = [
   },
   {
     name: 'password',
-    label: 'Contraseña',
+    label: 'Password',
     type: 'password',
   },
 ]

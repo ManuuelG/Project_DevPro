@@ -10,7 +10,6 @@ import { ProjectForm } from 'components'
 import { fields, schema } from './form-data'
 import { Link as RouterLink } from 'react-router-dom'
 import { useState } from 'react'
-
 import { login } from 'services/auth-service'
 
 import { toast } from 'react-toastify'
