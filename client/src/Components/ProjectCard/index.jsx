@@ -11,6 +11,8 @@ import EditIcon from '@mui/icons-material/Edit'
 import HighlightOffIcon from '@mui/icons-material/HighlightOff'
 import PageviewOutlinedIcon from '@mui/icons-material/PageviewOutlined'
 import { useState, useEffect } from 'react'
+import Chip from '@mui/material/Chip'
+import skillService from 'services/skill-service'
 
 function ProjectCard({
   project,
@@ -23,10 +25,28 @@ function ProjectCard({
 }) {
   const { name, image, author, skills, faved } = project
   const [isFaved, setIsFaved] = useState(false)
+  const [skillsWithColor, setSkillsWithColor] = useState([])
 
   useEffect(() => {
     setIsFaved(faved)
   }, [faved])
+
+  useEffect(() => {
+    skillService
+      .get('/skills')
+      .then(response => {
+        const skillsWithColorData = response.data.map(skill => ({
+          ...skill,
+          color: skill.color || '#000000',
+        }))
+        setSkillsWithColor(skillsWithColorData)
+      })
+      .catch(error => {
+        console.error('Error fetching skills with color', error)
+      })
+  }, [])
+
+  console.log(skillsWithColor)
 
   const handleToggleFaved = async () => {
     try {
@@ -64,11 +84,27 @@ function ProjectCard({
         <Typography gutterBottom variant="h5" component="div">
           {name}
         </Typography>
-        <Typography variant="body2" color="text.secondary">
+        <Typography
+          variant="body2"
+          color="text.secondary"
+          sx={{ marginBottom: 1 }}
+        >
           {author?.username}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {skills.map(skill => skill.name).join(', ')}
+          {skills.map(skill => (
+            <Chip
+              key={skill._id}
+              label={skill.name}
+              sx={{
+                backgroundColor:
+                  skillsWithColor.find(s => s.name === skill.name)?.color ||
+                  '#000000',
+                color: 'white',
+                margin: '2px',
+              }}
+            />
+          ))}
         </Typography>
       </CardContent>
       <CardActions
