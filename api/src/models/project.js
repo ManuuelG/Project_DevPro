@@ -1,10 +1,13 @@
 const mongoose = require('mongoose')
 const { body } = require('express-validator')
 
+const createUploader = require('../utils/multer')
+
 const Project = mongoose.model('Project', {
   name: { type: String, required: true, unique: true },
   date: { type: Number, required: true },
   image: { type: String, required: true },
+  imageCloudinaryId: { type: String, required: true },
   repolink: { type: String, required: true, unique: true },
   deploylink: { type: String, unique: true },
   description: { type: String },
@@ -25,26 +28,21 @@ const projectValidationSchema = [
     .withMessage('El nombre es obligatorio')
     .custom(async (name, { req }) => {
       const filter = { name }
-
       if (req.params.projectId) {
         filter['_id'] = { $ne: req.params.projectId }
       }
-
       const project = await Project.findOne(filter)
       if (project) throw new Error('Ya hay un proyecto con ese nombre')
     }),
   body('date').notEmpty().isNumeric(),
-  body('image').notEmpty(),
   body('repolink')
     .notEmpty()
     .withMessage('El enlace del repositorio es obligatorio')
     .custom(async (repolink, { req }) => {
       const filter = { repolink }
-
       if (req.params.projectId) {
         filter['_id'] = { $ne: req.params.projectId }
       }
-
       const project = await Project.findOne(filter)
       if (project)
         throw new Error('Ya hay un proyecto con ese enlace de repositorio')
@@ -54,11 +52,9 @@ const projectValidationSchema = [
     .custom(async (deploylink, { req }) => {
       if (deploylink) {
         const filter = { deploylink }
-
         if (req.params.projectId) {
           filter['_id'] = { $ne: req.params.projectId }
         }
-
         const project = await Project.findOne(filter)
         if (project)
           throw new Error('Ya hay un proyecto con ese enlace de despliegue')
@@ -67,5 +63,12 @@ const projectValidationSchema = [
   body('skills').notEmpty(),
 ]
 
+const TYPES = {
+  'image/jpeg': 'jpeg',
+  'image/png': 'png',
+  'image/gif': 'gif',
+}
+
 exports.projectValidationSchema = projectValidationSchema
 exports.Project = Project
+exports.uploadImage = createUploader(TYPES).single('image')

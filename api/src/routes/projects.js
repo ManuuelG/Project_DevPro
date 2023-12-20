@@ -1,6 +1,6 @@
 const { Router } = require('express')
 const projectController = require('../controllers/projects')
-const { projectValidationSchema } = require('../models/project')
+const { projectValidationSchema, uploadImage } = require('../models/project')
 
 const validateParamId = require('../middlewares/mongoIdFromParam')
 
@@ -25,6 +25,7 @@ router.get(
 router.post(
   '/',
   auth,
+  uploadImage,
   projectValidationSchema,
   validate,
   projectController.create
@@ -41,6 +42,7 @@ router.put(
 router.put(
   '/:projectId',
   auth,
+  uploadImage,
   validateParamId('projectId'),
   projectValidationSchema,
   validate,

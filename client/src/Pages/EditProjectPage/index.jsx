@@ -27,8 +27,21 @@ function EditProjectPage() {
 
   const onSubmit = project => {
     console.log('Proyecto:', project)
+
+    const formData = new FormData()
+
+    formData.append('name', project.name)
+    formData.append('date', project.date)
+    formData.append('image', project.image[0], project.image[0].name)
+    formData.append('repolink', project.repolink)
+    formData.append('deploylink', project.deploylink)
+    formData.append('description', project.description)
+    project.skills.forEach(skill => {
+      formData.append('skills', skill)
+    })
+
     projectService
-      .update(projectId, project)
+      .update(projectId, formData)
       .then(() => console.log(project))
       .catch(err => {
         console.error('Error al enviar la solicitud:', err)

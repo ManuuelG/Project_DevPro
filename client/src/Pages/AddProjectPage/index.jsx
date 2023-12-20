@@ -25,8 +25,20 @@ function CreateProjectPage() {
   const onSubmit = (project, { reset }) => {
     console.log('Proyecto:', project)
 
+    const formData = new FormData()
+
+    formData.append('name', project.name)
+    formData.append('date', project.date)
+    formData.append('image', project.image[0], project.image[0].name)
+    formData.append('repolink', project.repolink)
+    formData.append('deploylink', project.deploylink)
+    formData.append('description', project.description)
+    project.skills.forEach(skill => {
+      formData.append('skills', skill)
+    })
+
     projectService
-      .create(project)
+      .create(formData)
       .then(
         response => console.log('Respuesta del servidor:', response.data),
         reset()

@@ -59,6 +59,28 @@ function ProjectForm({
           )
         }
 
+        if (type === 'file') {
+          return (
+            <Controller
+              key={name}
+              name={name}
+              control={control}
+              render={({ field: { onChange, value, ...field } }) => {
+                return (
+                  <Input
+                    {...field}
+                    {...rest}
+                    value={value?.fileName}
+                    type={type}
+                    errors={errors[name]}
+                    onChange={e => onChange(e.target.files[0])}
+                  />
+                )
+              }}
+            />
+          )
+        }
+
         const { ref, ...registerProps } = register(name)
 
         return (

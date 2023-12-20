@@ -2,6 +2,7 @@ const { Project } = require('../models/project')
 const { User } = require('../models/user')
 const { Skill } = require('../models/skill')
 const mongoose = require('mongoose')
+const cloudinary = require('../utils/cloudinary')
 
 const getAll = async (req, res) => {
   try {
@@ -83,8 +84,12 @@ const create = async (req, res) => {
   try {
     const userId = req.user.id
 
+    const { path: image, filename: imageCloudinaryId } = req.file
+
     const newProject = await Project.create({
       ...req.body,
+      image,
+      imageCloudinaryId,
       author: new mongoose.Types.ObjectId(userId),
     })
 
@@ -113,6 +118,8 @@ const update = async (req, res) => {
     const { projectId } = req.params
     const userId = req.user.id
 
+    const { path: image, filename: imageCloudinaryId } = req.file
+
     const existingProject = await Project.findOne({
       _id: projectId,
       author: userId,
@@ -126,11 +133,15 @@ const update = async (req, res) => {
 
     const currentSkills = existingProject.skills
 
-    const updatedProject = await Project.findByIdAndUpdate(
-      projectId,
-      { ...req.body },
-      { new: true }
-    )
+    const updatedProject = await Project.findByIdAndUpdate(projectId, {
+      ...req.body,
+      image,
+      imageCloudinaryId,
+    })
+
+    await cloudinary.uploader.destroy(updatedProject.imageCloudinaryId, {
+      invalidate: true,
+    })
 
     const updatedSkills = updatedProject.skills
 
@@ -213,6 +224,10 @@ const remove = async (req, res) => {
     const deletedProject = await Project.findOneAndDelete({
       _id: projectId,
       author: userId,
+    })
+
+    await cloudinary.uploader.destroy(deletedProject.imageCloudinaryId, {
+      invalidate: true,
     })
 
     if (!deletedProject) {

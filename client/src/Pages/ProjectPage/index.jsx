@@ -9,12 +9,10 @@ import { useNavigate } from 'react-router-dom'
 
 function ProjectPage() {
   const navigate = useNavigate()
-  const { projects, loading, errors, setProjects } = useProjects()
+  const { projects, loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [{ auth, username, id }] = useAuth()
-
-  console.log(id)
 
   useEffect(() => {
     projectService

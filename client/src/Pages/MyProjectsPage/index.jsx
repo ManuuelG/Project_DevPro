@@ -9,25 +9,31 @@ import { useNavigate } from 'react-router-dom'
 
 function MyProjectPage() {
   const navigate = useNavigate()
-  const [{ auth, username }] = useAuth()
-  const { projects, loading, errors, setProjects } = useProjects()
+  const [{ auth, username, id }] = useAuth()
+  const { loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
 
   useEffect(() => {
-    if (username) {
+    if (id) {
       projectService
         .get()
         .then(response => {
           const userProjects = response.data.filter(
             project => project.author.username === username
           )
-          setFilteredProjects(userProjects)
+
+          const projectsData = userProjects.map(project => ({
+            ...project,
+            faved: project.faved.includes(id),
+          }))
+
+          setFilteredProjects(projectsData)
         })
         .catch(error => {
           console.error('Error fetching data', error)
         })
     }
-  }, [username])
+  }, [id])
 
   const handleSkillChange = selectedSkills => {
     if (selectedSkills.length === 0) {

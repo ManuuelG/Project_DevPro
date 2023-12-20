@@ -3,7 +3,12 @@ import * as yup from 'yup'
 const fields = [
   { name: 'name', label: 'Nombre', placeholder: 'Nombre del proyecto' },
   { name: 'date', label: 'Fecha', type: 'number' },
-  { name: 'image', label: 'Imagen', placeholder: 'URL de la imagen' },
+  {
+    name: 'image',
+    label: 'Imagen',
+    type: 'file',
+    placeholder: 'URL de la imagen',
+  },
   {
     name: 'repolink',
     label: 'Enlace al repositorio',
@@ -28,11 +33,27 @@ const fields = [
   },
 ]
 
+const TYPES = {
+  'image/jpeg': 'jpeg',
+  'image/gif': 'gif',
+  'image/png': 'png',
+}
+
 const schema = yup
   .object({
     name: yup.string().required('Nombre Obligatorio'),
     date: yup.number().typeError('Fecha Obligatoria').required(),
-    image: yup.string().required('URL de imagen inválida'),
+    image: yup
+      .mixed()
+      .test({
+        message: 'Imagen obligatoria',
+        test: value => value.length,
+      })
+      .test({
+        message: 'La imagen debe estar en formato ' + Object.values(TYPES),
+        test: value => value.length && TYPES[value[0].type],
+      }),
+
     repolink: yup.string().required('URL de repositorio inválida'),
     deploylink: yup.string('URL de despliegue inválida'),
     description: yup.string(),

@@ -67,7 +67,7 @@ function ProjectCard({
       }}
     >
       <CardMedia
-        sx={{ height: 140, backgroundSize: 'contain' }}
+        sx={{ width: '100%', height: 140, backgroundSize: 'cover' }}
         image={image}
         title={name}
       />

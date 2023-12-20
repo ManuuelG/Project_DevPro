@@ -17,14 +17,14 @@ AuthContext.displayName = 'AuthContext'
 function reducer(state, action) {
   switch (action.type) {
     case 'login':
-      return { auth: true, username: action.username, id: action._id }
+      return { auth: true, username: action.username, id: action.id }
 
     case 'admin':
       return {
         auth: true,
         admin: true,
         username: action.username,
-        id: action._id,
+        id: action.id,
       }
 
     case 'logout':

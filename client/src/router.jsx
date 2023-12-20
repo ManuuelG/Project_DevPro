@@ -7,9 +7,11 @@ import MyProjectPage from './Pages/MyProjectsPage'
 import AddProjectPage from 'pages/AddProjectPage'
 import EditProjectPage from 'pages/EditProjectPage'
 import ProjectPageDetails from 'pages/ProjectPageDetails'
+import MyFavoritePage from 'pages/MyFavoritePage'
 import RegisterPage from 'pages/RegisterPage'
 import LoginPage from 'pages/LoginPage'
 import LogoutPage from 'pages/LogoutPage'
+import FileForm from 'pages/FileForm'
 
 const router = createBrowserRouter([
   {
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
       {
         path: '/projects/edit/:projectId',
         element: <EditProjectPage />,
+      },
+      {
+        path: '/favorites',
+        element: <MyFavoritePage />,
+      },
+      {
+        path: '/file',
+        element: <FileForm />,
       },
       {
         path: '/login',
