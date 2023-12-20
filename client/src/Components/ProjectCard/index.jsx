@@ -46,8 +46,6 @@ function ProjectCard({
       })
   }, [])
 
-  console.log(skillsWithColor)
-
   const handleToggleFaved = async () => {
     try {
       await onFav(project._id)
@@ -117,7 +115,7 @@ function ProjectCard({
         {showActions && (
           <>
             <IconButton size="small" onClick={handleToggleFaved}>
-              {!isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
+              {isFaved ? <FavoriteIcon /> : <FavoriteBorderIcon />}
             </IconButton>
             <IconButton size="small" onClick={onDetails}>
               {' '}

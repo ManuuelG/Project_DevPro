@@ -12,37 +12,33 @@ function ProjectPage() {
   const { projects, loading, errors, setProjects } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [{ auth, username }] = useAuth()
+  const [{ auth, username, id }] = useAuth()
+
+  console.log(id)
 
   useEffect(() => {
     projectService
       .get()
       .then(response => {
-        setFilteredProjects(response.data)
-        console.log(response.data)
+        const projectsData = response.data.map(project => ({
+          ...project,
+          faved: project.faved.includes(id),
+        }))
+        setFilteredProjects(projectsData)
       })
       .catch(error => {
-        console.error('Error fetching data', error)
+        console.error('Error', error)
       })
-  }, [])
-
-  useEffect(() => {
-    projectService
-      .getFav()
-      .then(response => {
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.error('Error fetching data', error)
-      })
-  }, [])
+  }, [id])
 
   const handleSkillChange = selectedSkills => {
     if (selectedSkills.length === 0) {
       setFilteredProjects(projects)
     } else {
       const filtered = projects.filter(project =>
-        project.skills.some(skill => selectedSkills.includes(skill.name))
+        selectedSkills.every(skill =>
+          project.skills.some(pSkill => pSkill.name === skill)
+        )
       )
       setFilteredProjects(filtered)
     }
@@ -71,7 +67,8 @@ function ProjectPage() {
   const handleToggleFav = projectId => {
     projectService
       .addFav(projectId)
-      .then(() =>
+      .then(response => {
+        console.log(response.data)
         setFilteredProjects(prevProjects =>
           prevProjects.map(project =>
             project._id === projectId
@@ -79,7 +76,7 @@ function ProjectPage() {
               : project
           )
         )
-      )
+      })
       .catch(err => {
         console.error('Error dando fav desde page', err)
       })
