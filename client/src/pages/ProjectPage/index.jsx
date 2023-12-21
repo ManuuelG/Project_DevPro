@@ -51,17 +51,6 @@ function ProjectPage() {
     setFilteredProjects(filtered)
   }
 
-  const handleEdit = projectId => navigate('projects/edit/' + projectId)
-  const handleDelete = projectId =>
-    projectService
-      .delete(projectId)
-      .then(({ data }) =>
-        setFilteredProjects(
-          filteredProjects.filter(projects => projects._id !== data._id)
-        )
-      )
-      .catch(err => console.log(err))
-
   const handleToggleFav = projectId => {
     projectService
       .addFav(projectId)
@@ -127,12 +116,9 @@ function ProjectPage() {
             <Grid item key={project._id} xs={12} sm={6} md={4} lg={3}>
               <ProjectCard
                 project={project}
-                onEdit={() => handleEdit(project._id)}
-                onDelete={() => handleDelete(project._id)}
                 onFav={handleToggleFav}
                 onDetails={() => handleViewDetails(project._id)}
                 showActions={auth}
-                canEditAndDelete={auth && username === project.author?.username}
               />
             </Grid>
           ))

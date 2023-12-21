@@ -1,18 +1,29 @@
 import React, { useEffect, useState } from 'react'
-import { Container, Grid, Box, Button, CircularProgress } from '@mui/material'
+import {
+  Container,
+  Grid,
+  Box,
+  Button,
+  CircularProgress,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+} from '@mui/material'
 import { ProjectCard, MultiSelect } from 'components'
 import projectService from 'services/project-service'
 import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import { Link } from 'react-router-dom'
 import { useProjects, useAuth } from 'hooks'
 import { useNavigate } from 'react-router-dom'
-import OfflineBoltOutlinedIcon from '@mui/icons-material/OfflineBoltOutlined'
 
 function MyProjectPage() {
   const navigate = useNavigate()
   const [{ auth, username, id, admin }] = useAuth()
   const { loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
+  const [projectToDelete, setProjectToDelete] = useState(null)
 
   useEffect(() => {
     if (id) {
@@ -57,16 +68,32 @@ function MyProjectPage() {
     }
   }
 
-  const handleEdit = projectId => navigate('projects/edit/' + projectId)
-  const handleDelete = projectId =>
+  const handleEdit = projectId => navigate('edit/' + projectId)
+
+  const handleDelete = projectId => {
+    setProjectToDelete(projectId)
+    setDeleteDialogOpen(true)
+  }
+
+  const handleConfirmDelete = () => {
     projectService
-      .delete(projectId)
+      .delete(projectToDelete)
       .then(({ data }) => {
         setFilteredProjects(prevProjects =>
           prevProjects.filter(project => project._id !== data._id)
         )
+        setDeleteDialogOpen(false)
       })
-      .catch(err => console.log(err))
+      .catch(err => {
+        console.log(err)
+        setDeleteDialogOpen(false)
+      })
+  }
+
+  const handleCancelDelete = () => {
+    setProjectToDelete(null)
+    setDeleteDialogOpen(false)
+  }
 
   const handleToggleFav = projectId => {
     projectService
@@ -144,6 +171,21 @@ function MyProjectPage() {
           ))
         )}
       </Grid>
+
+      <Dialog open={deleteDialogOpen} onClose={handleCancelDelete}>
+        <DialogTitle>Confirm Delete</DialogTitle>
+        <DialogContent>
+          Are you sure you want to delete this project?
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCancelDelete} color="primary">
+            Cancel
+          </Button>
+          <Button onClick={handleConfirmDelete} color="primary">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Container>
   )
 }
