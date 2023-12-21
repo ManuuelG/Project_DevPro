@@ -18,7 +18,7 @@ function CreateProjectPage() {
         setSkills(response.data)
       })
       .catch(error => {
-        console.error('Error fetching skills', error)
+        console.log('Error fetching skills', error)
       })
   }, [])
 
