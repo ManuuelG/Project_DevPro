@@ -16,6 +16,10 @@ module.exports = function (app) {
   app.use('/api/projects', require('../routes/projects'))
   app.use('/api/skills', require('../routes/skills'))
 
+  app.get('/health', (req, res) => {
+    res.send({ status: 'ok' })
+  })
+
   app.get('/ping', (req, res) => {
     res.send({ success: true })
   })
