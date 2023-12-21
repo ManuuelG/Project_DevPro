@@ -23,7 +23,7 @@ function MyFavoritePage() {
 
         setFavoriteProjects(userProjects)
       })
-      .catch(error => console.error('Error', error))
+      .catch(error => console.log('Error', error))
   }, [id])
 
   const handleSearch = term => {
