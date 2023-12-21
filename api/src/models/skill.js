@@ -3,7 +3,7 @@ const { body } = require('express-validator')
 
 const skillSchema = new mongoose.Schema({
   name: { type: String, required: true, unique: true },
-  color: { type: String },
+  color: { type: String, required: true, unique: true },
   users: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 })
 

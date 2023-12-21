@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { Container, Grid, Box, CircularProgress } from '@mui/material'
 import { ProjectCard, SearchBar } from 'components'
 import projectService from 'services/project-service'
+
 import { useProjects, useAuth } from 'hooks'
 import { useNavigate } from 'react-router-dom'
 
@@ -10,12 +11,18 @@ function MyFavoritePage() {
   const { loading } = useProjects()
   const [favoriteProjects, setFavoriteProjects] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
-  const [{ id }] = useAuth()
+  const [{ id, username, auth }] = useAuth()
 
   useEffect(() => {
     projectService
-      .getFav()
-      .then(response => console.log(response.data))
+      .get()
+      .then(response => {
+        const userProjects = response.data.filter(project =>
+          project.faved.includes(id)
+        )
+
+        setFavoriteProjects(userProjects)
+      })
       .catch(error => console.error('Error', error))
   }, [id])
 
@@ -29,6 +36,23 @@ function MyFavoritePage() {
   }
 
   const handleViewDetails = projectId => navigate('/' + projectId)
+
+  const handleToggleFav = projectId => {
+    projectService
+      .addFav(projectId)
+      .then(() =>
+        setFavoriteProjects(prevProjects =>
+          prevProjects.map(project =>
+            project._id === projectId
+              ? { ...project, faved: !project.faved }
+              : project
+          )
+        )
+      )
+      .catch(err => {
+        console.error('Error dando fav desde page', err)
+      })
+  }
 
   if (loading) return <CircularProgress />
 
@@ -64,7 +88,8 @@ function MyFavoritePage() {
               <ProjectCard
                 project={project}
                 onDetails={() => handleViewDetails(project._id)}
-                showActions={false}
+                showActions={auth}
+                onFav={handleToggleFav}
               />
             </Grid>
           ))

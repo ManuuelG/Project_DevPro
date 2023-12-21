@@ -66,7 +66,6 @@ function ProjectPage() {
     projectService
       .addFav(projectId)
       .then(response => {
-        console.log(response.data)
         setFilteredProjects(prevProjects =>
           prevProjects.map(project =>
             project._id === projectId

@@ -6,7 +6,6 @@ const validateParamId = require('../middlewares/mongoIdFromParam')
 
 const validate = require('../middlewares/validate')
 const auth = require('../middlewares/auth')
-const admin = require('../middlewares/admin')
 
 const router = Router()
 

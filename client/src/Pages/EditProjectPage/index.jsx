@@ -1,5 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { Stack, Typography, CircularProgress } from '@mui/material'
+import {
+  Stack,
+  Typography,
+  CircularProgress,
+  Container,
+  Paper,
+} from '@mui/material'
 import { ProjectForm } from 'components'
 import { fields, schema, getDefaultValues } from './form-data'
 import projectService from 'services/project-service'
@@ -53,31 +59,45 @@ function EditProjectPage() {
   if (loading) return <CircularProgress />
 
   return (
-    <Stack spacing={3}>
-      <Typography variant="h2" component="h2">
-        Editar Proyecto
-      </Typography>
+    <Container maxWidth="sm" sx={{ paddingBottom: 2 }}>
+      {' '}
+      <Paper
+        elevation={3}
+        sx={{
+          backgroundColor: 'transparent',
+          padding: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Stack spacing={3}>
+          <Typography variant="h2" component="h2" sx={{ textAlign: 'center' }}>
+            Editar Proyecto
+          </Typography>
 
-      <ProjectForm
-        inputs={fields.map(field => {
-          if (field.name === 'skills') {
-            return {
-              ...field,
-              options: skills.map(skill => ({
-                value: skill._id,
-                label: skill.name,
-              })),
-            }
-          }
-          return field
-        })}
-        onSubmit={onSubmit}
-        validationSchema={schema}
-        errorsFromResponse={errorsFromResponse}
-        submitLabel="Guardar Cambios"
-        defaultValues={getDefaultValues(project)}
-      />
-    </Stack>
+          <ProjectForm
+            inputs={fields.map(field => {
+              if (field.name === 'skills') {
+                return {
+                  ...field,
+                  options: skills.map(skill => ({
+                    value: skill._id,
+                    label: skill.name,
+                  })),
+                }
+              }
+              return field
+            })}
+            onSubmit={onSubmit}
+            validationSchema={schema}
+            errorsFromResponse={errorsFromResponse}
+            submitLabel="Guardar Cambios"
+            defaultValues={getDefaultValues(project)}
+          />
+        </Stack>
+      </Paper>
+    </Container>
   )
 }
 

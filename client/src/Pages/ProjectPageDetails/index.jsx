@@ -18,13 +18,13 @@ const ProjectPageDetails = () => {
 
   const [users, setUsers] = useState([])
   const [skills, setSkills] = useState([])
+  const [skillsWithColor, setSkillsWithColor] = useState([])
 
   useEffect(() => {
     userService
       .get()
       .then(response => {
         setUsers(response.data)
-        console.log(response.data)
       })
       .catch(error => {
         console.error('Error fetching skills', error)
@@ -36,8 +36,14 @@ const ProjectPageDetails = () => {
       .get()
       .then(response => {
         setSkills(response.data)
-        console.log(response.data)
+
+        const skillsWithColorData = response.data.map(skill => ({
+          ...skill,
+          color: skill.color || '#000000',
+        }))
+        setSkillsWithColor(skillsWithColorData)
       })
+
       .catch(error => {
         console.error('Error fetching skills', error)
       })
@@ -48,14 +54,11 @@ const ProjectPageDetails = () => {
       .getById(projectId)
       .then(response => {
         setProject(response.data)
-        console.log(response.data)
       })
       .catch(error => {
         console.error('Error fetching project details', error)
       })
   }, [projectId])
-
-  console.log(users)
 
   if (loading) {
     return <CircularProgress />
@@ -85,11 +88,7 @@ const ProjectPageDetails = () => {
       >
         {project.name}
       </Typography>
-      <Typography
-        variant="body1"
-        paragraph
-        sx={{ marginBottom: '15px' /* fontWeight: 'bold' */ }}
-      >
+      <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
         Autor:{' '}
         {users.find(user => user._id === project.author)?.username ||
           'Desconocido'}
@@ -114,7 +113,9 @@ const ProjectPageDetails = () => {
               label={skill.name}
               sx={{
                 margin: '0 5px',
-                backgroundColor: '#2196f3',
+                backgroundColor:
+                  skillsWithColor.find(s => s.name === skill.name)?.color ||
+                  '#000000',
                 color: 'white',
               }}
             />

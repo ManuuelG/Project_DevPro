@@ -6,10 +6,11 @@ import CreateNewFolderIcon from '@mui/icons-material/CreateNewFolder'
 import { Link } from 'react-router-dom'
 import { useProjects, useAuth } from 'hooks'
 import { useNavigate } from 'react-router-dom'
+import OfflineBoltOutlinedIcon from '@mui/icons-material/OfflineBoltOutlined'
 
 function MyProjectPage() {
   const navigate = useNavigate()
-  const [{ auth, username, id }] = useAuth()
+  const [{ auth, username, id, admin }] = useAuth()
   const { loading } = useProjects()
   const [filteredProjects, setFilteredProjects] = useState([])
 
@@ -84,6 +85,8 @@ function MyProjectPage() {
       })
   }
 
+  const handleViewDetails = projectId => navigate('/' + projectId)
+
   if (loading) return <CircularProgress />
 
   return (
@@ -108,6 +111,7 @@ function MyProjectPage() {
             <CreateNewFolderIcon /> New Project
           </Button>
         )}
+
         <MultiSelect onSkillChange={handleSkillChange} />
       </Box>
       <Grid container spacing={2} sx={{ marginTop: 2, marginBottom: 2 }}>
@@ -132,6 +136,7 @@ function MyProjectPage() {
                 showActions={auth}
                 onFav={handleToggleFav}
                 onEdit={() => handleEdit(project._id)}
+                onDetails={() => handleViewDetails(project._id)}
                 onDelete={() => handleDelete(project._id)}
                 canEditAndDelete={auth && username === project.author?.username}
               />

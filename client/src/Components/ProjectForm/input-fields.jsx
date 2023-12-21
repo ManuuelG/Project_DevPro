@@ -4,6 +4,16 @@ const input = ({ name, errors, ...rest }) => {
   return (
     <TextField
       id={name}
+      sx={{
+        backgroundColor: '#EEEEEE',
+
+        borderRadius: 2,
+        '& fieldset': { border: 'none' },
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 0 10px rgba(7, 59, 76, 0.5)',
+        },
+      }}
       name={name}
       variant="outlined"
       error={Boolean(errors)}
@@ -18,6 +28,15 @@ const select = ({ name, errors, options, placeholder, ...rest }) => {
     <TextField
       select
       id={name}
+      sx={{
+        backgroundColor: '#EEEEEE',
+        borderRadius: 2,
+        '& fieldset': { border: 'none' },
+        transition: 'box-shadow 0.3s ease',
+        '&:hover': {
+          boxShadow: '0 0 10px rgba(7, 59, 76, 0.5)',
+        },
+      }}
       name={name}
       variant="outlined"
       error={Boolean(errors)}

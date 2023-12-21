@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Stack, Typography } from '@mui/material'
+import { Stack, Typography, Paper, Container } from '@mui/material'
 import { ProjectForm } from 'components'
 import { fields, schema } from './form-data'
 import projectService from 'services/project-service'
@@ -40,7 +40,8 @@ function CreateProjectPage() {
     projectService
       .create(formData)
       .then(
-        response => console.log('Respuesta del servidor:', response.data),
+        response =>
+          console.log('Proyecto creado en el servidor:', response.data),
         reset()
       )
       .catch(err => {
@@ -51,30 +52,44 @@ function CreateProjectPage() {
   }
 
   return (
-    <Stack spacing={3}>
-      <Typography variant="h2" component="h2">
-        Crear Nuevo Proyecto
-      </Typography>
+    <Container maxWidth="sm" sx={{ paddingBottom: 2 }}>
+      {' '}
+      <Paper
+        elevation={3}
+        sx={{
+          backgroundColor: 'transparent',
+          padding: 3,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+        }}
+      >
+        <Stack spacing={3}>
+          <Typography variant="h2" component="h2" sx={{ textAlign: 'center' }}>
+            Nuevo Proyecto
+          </Typography>
 
-      <ProjectForm
-        inputs={fields.map(field => {
-          if (field.name === 'skills') {
-            return {
-              ...field,
-              options: skills.map(skill => ({
-                value: skill._id,
-                label: skill.name,
-              })),
-            }
-          }
-          return field
-        })}
-        onSubmit={onSubmit}
-        validationSchema={schema}
-        errorsFromResponse={errorsFromResponse}
-        submitLabel="Crear"
-      />
-    </Stack>
+          <ProjectForm
+            inputs={fields.map(field => {
+              if (field.name === 'skills') {
+                return {
+                  ...field,
+                  options: skills.map(skill => ({
+                    value: skill._id,
+                    label: skill.name,
+                  })),
+                }
+              }
+              return field
+            })}
+            onSubmit={onSubmit}
+            validationSchema={schema}
+            errorsFromResponse={errorsFromResponse}
+            submitLabel="Crear"
+          />
+        </Stack>
+      </Paper>
+    </Container>
   )
 }
 

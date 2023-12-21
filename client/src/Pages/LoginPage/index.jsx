@@ -49,7 +49,7 @@ function LoginPage() {
 
         const type = isAdmin ? 'admin' : 'login'
 
-        dispatch({ type, username, id })
+        dispatch({ type, username, isAdmin, id })
         navigate('/', {})
       })
       .catch(err => {
