@@ -118,6 +118,26 @@ const update = async (req, res) => {
     const { projectId } = req.params
     const userId = req.user.id
 
+    if (!req.file) {
+      const existingProject = await Project.findOne({
+        _id: projectId,
+        author: userId,
+      })
+
+      if (!existingProject) {
+        return res.status(404).json({
+          error: 'Proyecto no encontrado o no tiene permisos para modificarlo.',
+        })
+      }
+
+      const updatedProject = await Project.findByIdAndUpdate(projectId, {
+        ...req.body,
+      })
+
+      res.json(updatedProject)
+      return
+    }
+
     const { path: image, filename: imageCloudinaryId } = req.file
 
     const existingProject = await Project.findOne({

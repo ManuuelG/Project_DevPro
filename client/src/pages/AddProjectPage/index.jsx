@@ -5,8 +5,10 @@ import { fields, schema } from './form-data'
 import projectService from 'services/project-service'
 import skillService from 'services/skill-service'
 import { toast } from 'react-toastify'
+import { useNavigate } from 'react-router-dom'
 
 function CreateProjectPage() {
+  const navigate = useNavigate()
   const [errorsFromResponse, setErrorsFromResponse] = useState([])
 
   const [skills, setSkills] = useState([])
@@ -37,13 +39,14 @@ function CreateProjectPage() {
       formData.append('skills', skill)
     })
 
+    reset()
+
     projectService
       .create(formData)
-      .then(
-        response =>
-          console.log('Proyecto creado en el servidor:', response.data),
-        reset()
-      )
+      .then(response => {
+        console.log('Proyecto creado en el servidor:', response.data)
+        navigate('/')
+      })
       .catch(err => {
         console.error('Error al enviar la solicitud:', err)
         if (err.response.status === 400)
@@ -58,6 +61,7 @@ function CreateProjectPage() {
         elevation={3}
         sx={{
           backgroundColor: 'transparent',
+          border: '1px solid red',
           padding: 3,
           display: 'flex',
           flexDirection: 'column',

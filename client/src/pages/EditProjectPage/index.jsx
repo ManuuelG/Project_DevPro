@@ -12,8 +12,10 @@ import projectService from 'services/project-service'
 import skillService from 'services/skill-service'
 import { useParams } from 'react-router-dom'
 import { useProject } from 'hooks'
+import { useNavigate } from 'react-router-dom'
 
 function EditProjectPage() {
+  const navigate = useNavigate()
   const { projectId } = useParams()
   const { project, loading, errors } = useProject(projectId)
   const [errorsFromResponse, setErrorsFromResponse] = useState([])
@@ -48,7 +50,9 @@ function EditProjectPage() {
 
     projectService
       .update(projectId, formData)
-      .then(() => console.log(project))
+      .then(() => {
+        console.log(project), navigate('/')
+      })
       .catch(err => {
         console.error('Error al enviar la solicitud:', err)
         if (err.response.status === 400)
