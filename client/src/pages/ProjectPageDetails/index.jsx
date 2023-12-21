@@ -76,7 +76,7 @@ const ProjectPageDetails = () => {
         marginTop: '20px',
         backgroundColor: '#f5f5f5',
         borderRadius: '10px',
-        boxShadow: '0 4px 8px rgba(0, 0, 0, 0.1)',
+        boxShadow: '0px 0px 15px 5px rgba(255, 255, 255, 0.75)',
         maxWidth: '600px',
         margin: '0 auto',
       }}
@@ -89,22 +89,21 @@ const ProjectPageDetails = () => {
         {project.name}
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Autor:{' '}
+        User:{' '}
         {users.find(user => user._id === project.author)?.username ||
           'Desconocido'}
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Fecha: {project.date}
+        Date: {project.date}
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Enlace de Despliegue:{' '}
-        <a href={project.deploylink}>{project.deploylink}</a>
+        Deploy Link: <a href={project.deploylink}>{project.deploylink}</a>
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Enlace al Repositorio: <a href={project.repolink}>{project.repolink}</a>
+        Repository Link: <a href={project.repolink}>{project.repolink}</a>
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Herramientas:
+        Skills:
         {project.skills.map(skillId => {
           const skill = skills.find(s => s._id === skillId)
           return skill ? (
@@ -123,7 +122,7 @@ const ProjectPageDetails = () => {
         })}
       </Typography>
       <Typography variant="body1" paragraph sx={{ marginBottom: '15px' }}>
-        Descripción: {project.description}
+        Description: {project.description}
       </Typography>
 
       <Button
@@ -138,7 +137,7 @@ const ProjectPageDetails = () => {
           width: 'fit-content',
         }}
       >
-        Volver a la Lista de Proyectos
+        Return to all projects
       </Button>
     </Paper>
   )

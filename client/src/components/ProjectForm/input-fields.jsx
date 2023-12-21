@@ -6,7 +6,7 @@ const input = ({ name, errors, ...rest }) => {
       id={name}
       sx={{
         backgroundColor: '#EEEEEE',
-
+        maxWidth: '350px',
         borderRadius: 2,
         '& fieldset': { border: 'none' },
         transition: 'box-shadow 0.3s ease',
@@ -29,6 +29,7 @@ const select = ({ name, errors, options, placeholder, ...rest }) => {
       select
       id={name}
       sx={{
+        maxWidth: '350px',
         backgroundColor: '#EEEEEE',
         borderRadius: 2,
         '& fieldset': { border: 'none' },
@@ -50,6 +51,16 @@ const select = ({ name, errors, options, placeholder, ...rest }) => {
       </MenuItem>
       {options.map(option => (
         <MenuItem key={option.value} value={option.value}>
+          <span
+            style={{
+              display: 'inline-block',
+              width: '10px',
+              height: '10px',
+              borderRadius: '50%',
+              marginRight: '5px',
+              backgroundColor: option.color,
+            }}
+          />
           {option.label}
         </MenuItem>
       ))}

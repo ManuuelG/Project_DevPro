@@ -61,7 +61,7 @@ function CreateProjectPage() {
         elevation={3}
         sx={{
           backgroundColor: 'transparent',
-
+          boxShadow: '0px 0px 15px 5px rgba(255, 255, 255, 0.75)',
           padding: 3,
           display: 'flex',
           flexDirection: 'column',
@@ -70,7 +70,7 @@ function CreateProjectPage() {
       >
         <Stack spacing={3}>
           <Typography variant="h2" component="h2" sx={{ textAlign: 'center' }}>
-            Nuevo Proyecto
+            New Project
           </Typography>
 
           <ProjectForm
@@ -81,6 +81,7 @@ function CreateProjectPage() {
                   options: skills.map(skill => ({
                     value: skill._id,
                     label: skill.name,
+                    color: skill.color,
                   })),
                 }
               }
@@ -89,7 +90,7 @@ function CreateProjectPage() {
             onSubmit={onSubmit}
             validationSchema={schema}
             errorsFromResponse={errorsFromResponse}
-            submitLabel="Crear"
+            submitLabel="Create"
           />
         </Stack>
       </Paper>

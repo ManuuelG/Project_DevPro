@@ -3,27 +3,27 @@ import * as yup from 'yup'
 import _ from 'lodash'
 
 const fields = [
-  { name: 'name', label: 'Nombre', placeholder: 'Nombre del proyecto' },
-  { name: 'date', label: 'Fecha', type: 'number' },
+  { name: 'name', label: 'Name', placeholder: 'Project Name' },
+  { name: 'date', label: 'Date', type: 'number' },
   {
     name: 'image',
     type: 'file',
-    placeholder: 'URL de la imagen',
+    placeholder: 'URL Image',
   },
   {
     name: 'repolink',
-    label: 'Enlace al repositorio',
-    placeholder: 'URL del repositorio',
+    label: 'URL to your repository',
+    placeholder: 'URL to your repository',
   },
   {
     name: 'deploylink',
-    label: 'Enlace de despliegue',
-    placeholder: 'URL de despliegue',
+    label: 'URL to your Deployment Web',
+    placeholder: 'URL to your Deployment Web',
   },
   {
     name: 'description',
-    label: 'Descripción',
-    placeholder: 'Describa su proyecto',
+    label: 'Description',
+    placeholder: 'Describe your project',
   },
 
   {

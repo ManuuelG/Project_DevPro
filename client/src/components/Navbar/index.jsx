@@ -34,7 +34,7 @@ function Navbar() {
         { label: <FolderOutlinedIcon />, to: '/myprojects' },
         { label: <FolderSpecialOutlinedIcon />, to: '/favorites' },
       ]
-    : [{ label: <FolderOutlinedIcon />, to: '/' }]
+    : [{ label: <FolderOutlinedIcon />, to: '/login' }]
 
   const optionsUserMenu = user.auth
     ? [{ label: 'Logout', to: '/logout' }]
