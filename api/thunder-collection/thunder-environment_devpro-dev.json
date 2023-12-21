@@ -1,0 +1,12 @@
+{
+    "client": "Thunder Client",
+    "environmentName": "devpro-dev",
+    "dateExported": "2023-12-21T12:07:00.414Z",
+    "version": "1.0",
+    "variables": [
+        {
+            "name": "host",
+            "value": "localhost:3000/api"
+        }
+    ]
+}

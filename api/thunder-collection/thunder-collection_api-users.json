@@ -1,0 +1,81 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "api-users",
+    "dateExported": "2023-12-21T12:06:22.599Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "108133c9-e7f1-4ec0-86d8-eddde12ba5f9",
+            "colId": "79661876-2f82-44dc-8393-a976cbe097c0",
+            "containerId": "",
+            "name": "/signin",
+            "url": "/signin",
+            "method": "POST",
+            "sortNum": 20000,
+            "created": "2023-12-21T11:38:28.548Z",
+            "modified": "2023-12-21T11:55:12.669Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"usuario\",\n  \"password\": \"password\"\n  \n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "6bfe2edd-c83a-4062-a20a-adbc68e71c1b",
+            "colId": "79661876-2f82-44dc-8393-a976cbe097c0",
+            "containerId": "",
+            "name": "/signup",
+            "url": "/signup",
+            "method": "POST",
+            "sortNum": 30000,
+            "created": "2023-12-21T11:40:17.412Z",
+            "modified": "2023-12-21T11:55:15.756Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \"username\": \"usuario\",\n  \"password\": \"password\"\n  \n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "a13a0091-b089-46b9-a83b-944f90c89958",
+            "colId": "79661876-2f82-44dc-8393-a976cbe097c0",
+            "containerId": "",
+            "name": "/",
+            "url": "/",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-12-21T11:42:05.944Z",
+            "modified": "2023-12-21T11:55:31.937Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "3f87a494-f2c8-43f2-8333-141bf54d2e6f",
+            "colId": "79661876-2f82-44dc-8393-a976cbe097c0",
+            "containerId": "",
+            "name": "/:userId",
+            "url": "/65785922d55b3147a4d092d2",
+            "method": "GET",
+            "sortNum": 50000,
+            "created": "2023-12-21T11:42:36.910Z",
+            "modified": "2023-12-21T11:55:38.056Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ],
+    "settings": {
+        "options": {
+            "baseUrl": "{{host}}/users/"
+        },
+        "envId": "6c7f61a7-ba49-4763-a960-11d0e8a417fd"
+    }
+}

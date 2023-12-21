@@ -1,0 +1,133 @@
+{
+    "client": "Thunder Client",
+    "collectionName": "api-projects",
+    "dateExported": "2023-12-21T12:06:08.906Z",
+    "version": "1.1",
+    "folders": [],
+    "requests": [
+        {
+            "_id": "27f23138-c81f-452a-ae96-2a3d6eacb84a",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/",
+            "url": "/",
+            "method": "GET",
+            "sortNum": 10000,
+            "created": "2023-12-21T11:43:24.091Z",
+            "modified": "2023-12-21T11:56:01.253Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "206c0533-1f2c-41fe-8716-83eec6e8ec1d",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/favorites",
+            "url": "/favorites",
+            "method": "GET",
+            "sortNum": 30000,
+            "created": "2023-12-21T11:43:44.968Z",
+            "modified": "2023-12-21T11:56:05.141Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "\n  \"You need to register and log with an user\"\n  \n  \n",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "d68447d2-f33e-45e3-8f54-e1b0e5e3fdec",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/:projectId",
+            "url": "/",
+            "method": "GET",
+            "sortNum": 40000,
+            "created": "2023-12-21T11:44:44.940Z",
+            "modified": "2023-12-21T11:56:16.468Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "\n\"Enter a valid projectId in the route\"",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "0d5b8d32-d75c-4ded-ba6d-54f7edcdfe17",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/",
+            "url": "/",
+            "method": "POST",
+            "sortNum": 50000,
+            "created": "2023-12-21T11:45:31.423Z",
+            "modified": "2023-12-21T11:56:23.115Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n   \"name\":\"Project 1\",\n  \"date\": 1234,\n  \"repolink\":\"https://github.com\",\n  \"deploylink\": \"https://mydeployweb.com\",\n  \"description\": \"\",\n  \"skills\": \"[6579c7881d62a5e85f728b14, 6579c7941d62a5e85f728b18]\"\n  \n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "910433c0-7d66-40fe-96a6-b1ac1005a512",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/:projectId",
+            "url": "/",
+            "method": "PUT",
+            "sortNum": 60000,
+            "created": "2023-12-21T11:48:15.279Z",
+            "modified": "2023-12-21T11:56:29.286Z",
+            "headers": [],
+            "params": [],
+            "body": {
+                "type": "json",
+                "raw": "{\n  \n   \"name\":\"Project 1\",\n  \"date\": 1234,\n  \"repolink\":\"https://github.com\",\n  \"deploylink\": \"https://mydeployweb.com\",\n  \"description\": \"\",\n  \"skills\": \"[6579c7881d62a5e85f728b14, 6579c7941d62a5e85f728b18]\"\n  \n  \n}",
+                "form": []
+            },
+            "tests": []
+        },
+        {
+            "_id": "9fc84eb8-e792-4fff-960f-462c0d9e631f",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/:projectId",
+            "url": "/",
+            "method": "DELETE",
+            "sortNum": 80000,
+            "created": "2023-12-21T11:48:52.342Z",
+            "modified": "2023-12-21T11:56:34.273Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        },
+        {
+            "_id": "943a1685-9522-4011-8131-4aff0bb850cd",
+            "colId": "90d68245-c689-4024-bac1-629e6d08c572",
+            "containerId": "",
+            "name": "/favorites/:projectId",
+            "url": "favorites/",
+            "method": "PUT",
+            "sortNum": 100000,
+            "created": "2023-12-21T11:50:14.919Z",
+            "modified": "2023-12-21T11:56:43.959Z",
+            "headers": [],
+            "params": [],
+            "tests": []
+        }
+    ],
+    "settings": {
+        "options": {
+            "baseUrl": "{{host}}/projects/"
+        },
+        "envId": "6c7f61a7-ba49-4763-a960-11d0e8a417fd"
+    }
+}
