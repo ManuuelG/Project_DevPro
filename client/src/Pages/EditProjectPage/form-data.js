@@ -44,7 +44,7 @@ const schema = yup
   .object({
     name: yup.string().required('Nombre Obligatorio'),
     date: yup.number().typeError('Fecha Obligatoria').required(),
-    image: yup.mixed().required('Imagen Obligatoria'),
+    image: yup.mixed(),
     repolink: yup.string().required('URL de repositorio inválida'),
     deploylink: yup.string('URL de despliegue inválida'),
     description: yup.string(),
