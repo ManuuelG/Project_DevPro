@@ -64,7 +64,7 @@ const getById = async (req, res) => {
 const getFavorites = async (req, res) => {
   try {
     const userId = req.user.id
-
+    console.log(userId)
     const user = await User.findById(userId).populate('favorites')
 
     if (!user) {
