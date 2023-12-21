@@ -38,7 +38,7 @@ function EditProjectPage() {
 
     formData.append('name', project.name)
     formData.append('date', project.date)
-    formData.append('image', project.image[0], project.image[0].name)
+    formData.append('image', project.image)
     formData.append('repolink', project.repolink)
     formData.append('deploylink', project.deploylink)
     formData.append('description', project.description)
