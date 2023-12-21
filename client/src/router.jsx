@@ -11,7 +11,6 @@ import MyFavoritePage from 'pages/MyFavoritePage'
 import RegisterPage from 'pages/RegisterPage'
 import LoginPage from 'pages/LoginPage'
 import LogoutPage from 'pages/LogoutPage'
-import FileForm from 'pages/FileForm'
 
 const router = createBrowserRouter([
   {
@@ -43,10 +42,7 @@ const router = createBrowserRouter([
         path: '/favorites',
         element: <MyFavoritePage />,
       },
-      {
-        path: '/file',
-        element: <FileForm />,
-      },
+
       {
         path: '/login',
         element: <LoginPage />,
