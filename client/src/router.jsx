@@ -1,7 +1,7 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom'
-import RootLayout from 'layouts/RootLayout'
 import ErrorPage from 'pages/ErrorPage'
+import RootLayout from 'layouts/RootLayout'
 import ProjectPage from 'pages/ProjectPage'
 import MyProjectPage from 'pages/MyProjectsPage'
 import AddProjectPage from 'pages/AddProjectPage'
